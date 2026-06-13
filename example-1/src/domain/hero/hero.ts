@@ -1,19 +1,30 @@
-import type { LevelSheet } from './level.sheet'
+import type { LevelSheet } from '../level-sheet/level-sheet'
 
 type HeroProps = {
-  id?: string
-  totalExp: number
-  hp: number
-  level: number
+  id: string
+  totalExp?: number
+  hp?: number
+  level?: number
+}
+
+const defaultProps = {
+  level: 1,
+  totalExp: 0,
+  hp: 100,
 }
 
 export class Hero {
   private id!: string
-  private level: number = 1
-  private totalExp: number = 0
-  private hp: number = 0
+  private level: number = defaultProps.level
+  private totalExp: number = defaultProps.totalExp
+  private hp: number = defaultProps.hp
 
-  constructor({ id = crypto.randomUUID(), totalExp, hp, level }: HeroProps) {
+  constructor({
+    id,
+    totalExp = defaultProps.totalExp,
+    hp = defaultProps.hp,
+    level = defaultProps.level,
+  }: HeroProps) {
     this.setId(id)
     this.setTotalExp(totalExp)
     this.setHp(hp)
@@ -51,13 +62,14 @@ export class Hero {
   getHp() {
     return this.hp
   }
-  private setHp(hp: number) {
+  setHp(hp: number) {
     if (hp < 0) {
       throw new Error('hp 必須 >= 0')
     }
     this.hp = hp
   }
 
+  // 獲得 exp
   gainExp(exp: number, levelSheet: LevelSheet) {
     if (exp < 0) {
       throw new Error('exp 必須 >= 0')

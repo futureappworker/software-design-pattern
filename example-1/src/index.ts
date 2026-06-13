@@ -1,13 +1,13 @@
-import { Hero } from './domain/hero'
-import { LevelSheet } from './domain/level.sheet'
-
-const levelSheet = new LevelSheet()
+import { nanoid } from 'nanoid'
+import { Hero } from './domain/hero/hero'
+import { GainExpUseCase } from './domain/hero/usecases/gain-exp.usecase'
+import { LevelSheet } from './domain/level-sheet/level-sheet'
 
 const hero = new Hero({
-  totalExp: 0,
-  hp: 100,
-  level: 1,
+  id: nanoid(),
 })
+const levelSheet = new LevelSheet()
+const gainExpUseCase = new GainExpUseCase(levelSheet)
 
 console.log('=== 初始狀態 ===')
 console.log('HP:', hero.getHp())
@@ -15,15 +15,19 @@ console.log('EXP:', hero.getTotalExp())
 console.log('LEVEL:', hero.getLevel())
 
 console.log('\n=== 獲得經驗 100 ===')
-hero.gainExp(100, levelSheet)
-
+gainExpUseCase.execute({
+  hero,
+  exp: 100,
+})
 console.log('HP:', hero.getHp())
 console.log('EXP:', hero.getTotalExp())
 console.log('LEVEL:', hero.getLevel())
 
 console.log('\n=== 獲得經驗 900 ===')
-hero.gainExp(900, levelSheet)
-
+gainExpUseCase.execute({
+  hero,
+  exp: 900,
+})
 console.log('HP:', hero.getHp())
 console.log('EXP:', hero.getTotalExp())
 console.log('LEVEL:', hero.getLevel())
