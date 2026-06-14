@@ -3,12 +3,18 @@
 ## 目錄
 
 - `example-1` - OOP 技法一：依賴
+- `example-2` - OOP 技法二：關聯 1對1
 
 ## 執行
 
 OOP 技法一：依賴
 ```bash
 pnpm exec tsx example-1/src/index.ts
+```
+
+OOP 技法二：關聯 1對1
+```bash
+pnpm exec tsx example-2/src/index.ts
 ```
 
 ## Node.js 環境執行 TypeScript
