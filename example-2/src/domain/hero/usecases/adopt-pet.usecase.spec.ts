@@ -23,7 +23,7 @@ describe('adopt-pet.usecase', () => {
     })
 
     expect(hero.getPet()).toBe(pet)
-    expect(pet.getHero()).toBe(hero)
+    expect(pet.getOwner()).toBe(hero)
   })
 
   it('當 hero 已經領養寵物時, 應該拋出錯誤', () => {

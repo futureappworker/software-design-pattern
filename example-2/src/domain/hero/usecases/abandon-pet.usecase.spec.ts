@@ -45,6 +45,6 @@ describe('abandon-pet.usecase', () => {
     })
 
     expect(hero.getPet()).toBe(null)
-    expect(pet.getHero()).toBe(null)
+    expect(pet.getOwner()).toBe(null)
   })
 })

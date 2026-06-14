@@ -10,12 +10,12 @@ type PetProps = {
 export class Pet {
   private id!: string
   private name!: string
-  private hero: Hero | null = null
+  private owner: Hero | null = null
 
   constructor({ id, name, hero }: PetProps) {
     this.setId(id)
     this.setName(name)
-    this.setHero(hero)
+    this.setOwner(hero)
   }
 
   getId() {
@@ -25,11 +25,11 @@ export class Pet {
     this.id = id
   }
 
-  getHero() {
-    return this.hero
+  getOwner() {
+    return this.owner
   }
-  private setHero(hero: Hero | null) {
-    this.hero = hero
+  private setOwner(hero: Hero | null) {
+    this.owner = hero
   }
 
   getName() {
@@ -47,11 +47,11 @@ export class Pet {
 
   // 綁定主人
   boundOwner(hero: Hero) {
-    this.setHero(hero)
+    this.setOwner(hero)
   }
 
   // 移除主人
   removeOwner() {
-    this.setHero(null)
+    this.setOwner(null)
   }
 }
