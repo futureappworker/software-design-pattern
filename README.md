@@ -6,6 +6,7 @@
 - `example-2` - OOP 技法二：關聯 1對1
 - `example-3` - OOP 技法二：關聯 多對多
 - `example-4` - OOP 技法三：關聯類別
+- `example-5` - OOP 技法四：抽象類別
 
 ## 執行
 
@@ -27,6 +28,11 @@ pnpm exec tsx example-3/src/index.ts
 OOP 技法三：關聯類別
 ```bash
 pnpm exec tsx example-4/src/index.ts
+```
+
+OOP 技法四：抽象類別
+```bash
+pnpm exec tsx example-5/src/index.ts
 ```
 
 ## Node.js 環境執行 TypeScript
