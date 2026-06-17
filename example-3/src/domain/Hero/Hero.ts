@@ -1,3 +1,4 @@
+import { shouldBeGreaterThanOrEqual } from '../../utils/shouldBeGreaterThanOrEqual'
 import type { Guild } from '../Guild/Guild'
 import type { LevelSheet } from '../LevelSheet/LevelSheet'
 import type { Pet } from '../Pet/Pet'
@@ -68,9 +69,11 @@ export class Hero {
     return this.totalExp
   }
   private setTotalExp(totalExp: number) {
-    if (totalExp < 0) {
-      throw new Error('totalExp 必須 >= 0')
-    }
+    shouldBeGreaterThanOrEqual({
+      name: 'totalExp',
+      num: totalExp,
+      target: 0,
+    })
 
     this.totalExp = totalExp
   }
@@ -79,9 +82,11 @@ export class Hero {
     return this.level
   }
   private setLevel(level: number) {
-    if (level <= 0) {
-      throw new Error('level 必須 > 0')
-    }
+    shouldBeGreaterThanOrEqual({
+      name: 'level',
+      num: level,
+      target: 1,
+    })
     this.level = level
   }
 
@@ -89,17 +94,21 @@ export class Hero {
     return this.hp
   }
   setHp(hp: number) {
-    if (hp < 0) {
-      throw new Error('hp 必須 >= 0')
-    }
+    shouldBeGreaterThanOrEqual({
+      name: 'hp',
+      num: hp,
+      target: 0,
+    })
     this.hp = hp
   }
 
   // 獲得 exp
   gainExp(exp: number, levelSheet: LevelSheet) {
-    if (exp < 0) {
-      throw new Error('exp 必須 >= 0')
-    }
+    shouldBeGreaterThanOrEqual({
+      name: 'exp',
+      num: exp,
+      target: 0,
+    })
 
     this.setTotalExp(this.totalExp + exp)
     this.setLevel(levelSheet.queryLevel(this.totalExp))

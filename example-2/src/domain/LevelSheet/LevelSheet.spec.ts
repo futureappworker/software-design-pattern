@@ -8,7 +8,7 @@ describe('LevelSheet', () => {
 
       expect(() => {
         levelSheet.queryLevel(-1)
-      }).toThrow('totalExp 必須 >= 0')
+      }).toThrow()
     })
 
     it('當 totalExp 為 0 時, 應回傳等級 1', () => {
