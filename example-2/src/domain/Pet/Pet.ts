@@ -41,9 +41,6 @@ export class Pet {
   }
 
   eat(fruit: Fruit) {
-    if (!fruit) {
-      throw new Error('fruit 必傳')
-    }
     shouldNotBeNull<Fruit>({
       name: 'fruit',
       obj: fruit,
