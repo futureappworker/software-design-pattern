@@ -1,4 +1,3 @@
-import { shouldNotBeNull } from '../../utils/shouldNotBeNull'
 import type { Fruit } from '../Fruit/Fruit'
 import type { Hero } from '../Hero/Hero'
 
@@ -40,12 +39,7 @@ export class Pet {
     this.name = name
   }
 
-  eat(fruit: Fruit) {
-    shouldNotBeNull<Fruit>({
-      name: 'fruit',
-      obj: fruit,
-    })
-  }
+  eat(_fruit: Fruit) {}
 
   // 綁定主人
   boundOwner(hero: Hero) {

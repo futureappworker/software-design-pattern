@@ -39,11 +39,7 @@ export class Pet {
     this.name = name
   }
 
-  eat(fruit: Fruit) {
-    if (!fruit) {
-      throw new Error('fruit 必傳')
-    }
-  }
+  eat(_fruit: Fruit) {}
 
   // 綁定主人
   boundOwner(hero: Hero) {
