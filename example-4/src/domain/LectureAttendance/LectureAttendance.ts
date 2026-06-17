@@ -1,4 +1,4 @@
-import { assertWithinRange } from '../../utils/validationUtils'
+import { shouldBeWithinRange } from '../../utils/shouldBeWithinRange'
 import type { Lecture } from '../Lecture/Lecture'
 import type { Student } from '../Student/Student'
 
@@ -29,11 +29,11 @@ export class LectureAttendance {
     return this.grade
   }
   setGrade(grade: number) {
-    assertWithinRange({
+    shouldBeWithinRange({
       name: 'grade',
       num: grade,
-      min: 0,
-      max: 100,
+      inclusiveMin: 0,
+      inclusiveMax: 100,
     })
     this.grade = grade
   }

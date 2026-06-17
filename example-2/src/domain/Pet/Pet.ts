@@ -1,3 +1,4 @@
+import { shouldNotBeNull } from '../../utils/shouldNotBeNull'
 import type { Fruit } from '../Fruit/Fruit'
 import type { Hero } from '../Hero/Hero'
 
@@ -43,6 +44,10 @@ export class Pet {
     if (!fruit) {
       throw new Error('fruit 必傳')
     }
+    shouldNotBeNull<Fruit>({
+      name: 'fruit',
+      obj: fruit,
+    })
   }
 
   // 綁定主人
