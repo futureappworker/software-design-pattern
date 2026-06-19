@@ -8,6 +8,8 @@
 - `example-4` - OOP 技法三：關聯類別
 - `example-5` - OOP 技法四：抽象類別
 
+- `stage-1` - 副本一：撲克牌比大小遊戲
+
 ## 執行
 
 OOP 技法一：依賴
@@ -33,6 +35,11 @@ pnpm exec tsx example-4/src/index.ts
 OOP 技法四：抽象類別
 ```bash
 pnpm exec tsx example-5/src/index.ts
+```
+
+副本一：撲克牌比大小遊戲
+```bash
+pnpm exec tsx stage-1/src/index.ts
 ```
 
 ## Node.js 環境執行 TypeScript
