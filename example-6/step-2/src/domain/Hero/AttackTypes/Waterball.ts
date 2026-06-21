@@ -1,3 +1,4 @@
+import type { AttackTypeStrategy } from '../AttackTypeStrategy'
 import type { Hero } from '../Hero'
 
 type WaterballProps = {
@@ -8,7 +9,7 @@ const defaultProps = {
   name: 'Waterball',
 }
 
-export class Waterball {
+export class Waterball implements AttackTypeStrategy {
   private name: string
 
   constructor({ name = defaultProps.name }: WaterballProps = {}) {

@@ -1,3 +1,4 @@
+import type { AttackTypeStrategy } from '../AttackTypeStrategy'
 import type { Hero } from '../Hero'
 
 type EarthProps = {
@@ -8,7 +9,7 @@ const defaultProps = {
   name: 'Earth',
 }
 
-export class Earth {
+export class Earth implements AttackTypeStrategy {
   private name: string
 
   constructor({ name = defaultProps.name }: EarthProps = {}) {

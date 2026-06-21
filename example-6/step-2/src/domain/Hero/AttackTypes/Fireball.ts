@@ -1,3 +1,4 @@
+import type { AttackTypeStrategy } from '../AttackTypeStrategy'
 import type { Hero } from '../Hero'
 
 type FireballProps = {
@@ -8,7 +9,7 @@ const defaultProps = {
   name: 'Fireball',
 }
 
-export class Fireball {
+export class Fireball implements AttackTypeStrategy {
   private name: string
 
   constructor({ name = defaultProps.name }: FireballProps = {}) {
