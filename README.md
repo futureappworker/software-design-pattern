@@ -11,6 +11,7 @@
 - `stage-1` - 副本一：撲克牌比大小遊戲
 
 - `example-6` - 策略模式 step-1
+- `example-6` - 策略模式 step-2
 
 ## 執行
 
@@ -47,6 +48,11 @@ pnpm exec tsx stage-1/src/index.ts
 策略模式 step-1
 ```bash
 pnpm exec tsx example-6/step-1/src/index.ts
+```
+
+策略模式 step-2
+```bash
+pnpm exec tsx example-6/step-2/src/index.ts
 ```
 
 ## Node.js 環境執行 TypeScript
