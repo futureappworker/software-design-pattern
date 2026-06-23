@@ -13,6 +13,8 @@
 - `example-6` - 策略模式 step-1
 - `example-6` - 策略模式 step-2
 
+- `stage-2` - 副本二：交友配對系統
+
 ## 執行
 
 OOP 技法一：依賴
@@ -53,6 +55,11 @@ pnpm exec tsx example-6/step-1/src/index.ts
 策略模式 step-2
 ```bash
 pnpm exec tsx example-6/step-2/src/index.ts
+```
+
+副本二：交友配對系統
+```bash
+pnpm exec tsx stage-2/step-2/src/index.ts
 ```
 
 ## Node.js 環境執行 TypeScript
