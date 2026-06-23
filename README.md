@@ -57,9 +57,14 @@ pnpm exec tsx example-6/step-1/src/index.ts
 pnpm exec tsx example-6/step-2/src/index.ts
 ```
 
-副本二：交友配對系統
+副本二：交友配對系統 - 策略模式
 ```bash
 pnpm exec tsx stage-2/step-2/src/index.ts
+```
+
+副本二：交友配對系統 - 策略模式 + 樣板方法
+```bash
+pnpm exec tsx stage-2/step-4/src/index.ts
 ```
 
 ## Node.js 環境執行 TypeScript
