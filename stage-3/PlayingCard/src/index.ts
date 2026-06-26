@@ -22,8 +22,8 @@ const playRound = async (game: Game) => {
     }
 
     game.setCurrentPlayerIndex(i)
-    const card = (await player.chooseCard()) as PlayingCard
-    tableArea.addCardToPlayerArea(player.getId(), card)
+    const cards = (await player.chooseCard()) as PlayingCard[]
+    tableArea.addCardsToPlayerArea(player.getId(), cards)
   }
 
   const plays = players.flatMap((player) => {

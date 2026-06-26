@@ -16,7 +16,11 @@ export class PlayingCardDeck extends CardGameFrameworkDeck {
   initialize() {
     // 建立 52 張卡
     for (let rank = PlayingCardRank.TWO; rank <= PlayingCardRank.ACE; rank++) {
-      for (let suit = PlayingCardSuit.CLUB; suit <= PlayingCardSuit.SPADE; suit++) {
+      for (
+        let suit = PlayingCardSuit.CLUB;
+        suit <= PlayingCardSuit.SPADE;
+        suit++
+      ) {
         this.addCards([new PlayingCard({ rank, suit })])
       }
     }
