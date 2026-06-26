@@ -5,8 +5,8 @@ import {
   RandomAIChooseCardStrategy,
 } from '../../CardGameFramework/src/index'
 
-import type { Card } from './domain/Card/Card'
-import { Deck } from './domain/Deck/Deck'
+import type { PlayingCard } from './domain/PlayingCard/PlayingCard'
+import { PlayingCardDeck } from './domain/PlayingCardDeck/PlayingCardDeck'
 import { compareCards } from './utils/compareCards'
 
 // 每回合的流程
@@ -22,13 +22,13 @@ const playRound = async (game: Game) => {
     }
 
     game.setCurrentPlayerIndex(i)
-    const card = (await player.chooseCard()) as Card
+    const card = (await player.chooseCard()) as PlayingCard
     tableArea.addCardToPlayerArea(player.getId(), card)
   }
 
   const plays = players.flatMap((player) => {
     const card = tableArea.getPlayerArea(player.getId()).at(-1) as
-      | Card
+      | PlayingCard
       | undefined
     return card ? [{ player, card }] : []
   })
@@ -70,7 +70,7 @@ const showGameWinner = (game: Game) => {
 }
 
 const cardGameFramework = new CardGameFramework({
-  deck: new Deck({}),
+  deck: new PlayingCardDeck({}),
   initialHandSize: 13,
   aiChooseCardStrategy: new RandomAIChooseCardStrategy(),
   humanChooseCardStrategy: new CliHumanChooseCardStrategy(),
