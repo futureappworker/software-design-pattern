@@ -15,6 +15,8 @@
 
 - `stage-2` - 副本二：交友配對系統
 
+- `stage-3`/`PlayingCard` - 牌類遊戲框架 - 簡易撲克牌比大小遊戲
+
 ## 執行
 
 OOP 技法一：依賴
@@ -65,6 +67,11 @@ pnpm exec tsx stage-2/step-2/src/index.ts
 副本二：交友配對系統 - 策略模式 + 樣板方法
 ```bash
 pnpm exec tsx stage-2/step-4/src/index.ts
+```
+
+副本三：牌類遊戲框架 - 簡易撲克牌比大小遊戲
+```bash
+pnpm exec tsx stage-3/PlayingCard/src/index.ts
 ```
 
 ## Node.js 環境執行 TypeScript
