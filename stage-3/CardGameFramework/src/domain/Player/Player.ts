@@ -48,13 +48,14 @@ export abstract class Player {
     this.point = point
   }
 
-  drawCardFromDeck(deck: Deck) {
-    this.hand.drawCardFromDeck(deck)
+  drawCardFromDeck(deck: Deck): Card {
+    const card = this.hand.drawCardFromDeck(deck)
+    return card
   }
 
   removeCardFromHandAt(index: number): Card {
     return this.hand.removeCardAt(index)
   }
 
-  abstract chooseCard(): Promise<Card>
+  abstract chooseCard(): Promise<Card[]>
 }

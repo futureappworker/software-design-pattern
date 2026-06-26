@@ -5,7 +5,7 @@ import type { Game } from '../Game/Game'
 import type { HumanChooseCardStrategy } from './HumanChooseCardStrategy'
 
 export class CliHumanChooseCardStrategy implements HumanChooseCardStrategy {
-  async chooseCard(game: Game): Promise<Card> {
+  async chooseCard(game: Game): Promise<Card[]> {
     const rl = createInterface({ input, output })
     const player = game.getCurrentPlayer()
 
@@ -30,7 +30,7 @@ export class CliHumanChooseCardStrategy implements HumanChooseCardStrategy {
 
       if (selectedIndex >= 0 && selectedIndex < currentHand.length) {
         rl.close()
-        return player.removeCardFromHandAt(selectedIndex)
+        return [player.removeCardFromHandAt(selectedIndex)]
       }
 
       console.log(`只能輸入範圍 1~${currentHand.length} 的數字, 請再輸入一次`)

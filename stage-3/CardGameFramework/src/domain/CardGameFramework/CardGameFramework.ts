@@ -6,6 +6,7 @@ import type { HumanChooseCardStrategy } from '../HumanPlayer/HumanChooseCardStra
 type WinCondition = (game: Game) => boolean
 type TurnListener = (game: Game) => void | Promise<void>
 type BeforeGameHook = (game: Game) => void
+type GameStartHook = (game: Game) => void
 type BeforeTurnHook = (game: Game) => void
 type AfterTurnHook = (game: Game) => void
 type AfterGameHook = (game: Game) => void
@@ -18,6 +19,7 @@ type CardGameFrameworkConfig = {
   humanChooseCardStrategy: HumanChooseCardStrategy
   turnListener: TurnListener
   beforeGameHook?: BeforeGameHook
+  gameStartHook?: GameStartHook
   beforeTurnHook?: BeforeTurnHook
   afterTurnHook?: AfterTurnHook
   afterGameHook?: AfterGameHook
@@ -27,6 +29,7 @@ export class CardGameFramework {
   private game: Game
   private turnListener: TurnListener
   private beforeGameHook?: BeforeGameHook
+  private gameStartHook?: GameStartHook
   private beforeTurnHook?: BeforeTurnHook
   private afterTurnHook?: AfterTurnHook
   private afterGameHook?: AfterGameHook
@@ -39,6 +42,7 @@ export class CardGameFramework {
     humanChooseCardStrategy,
     turnListener,
     beforeGameHook,
+    gameStartHook,
     beforeTurnHook,
     afterTurnHook,
     afterGameHook,
@@ -55,6 +59,7 @@ export class CardGameFramework {
 
     this.turnListener = turnListener
     this.beforeGameHook = beforeGameHook
+    this.gameStartHook = gameStartHook
     this.beforeTurnHook = beforeTurnHook
     this.afterTurnHook = afterTurnHook
     this.afterGameHook = afterGameHook
@@ -82,6 +87,14 @@ export class CardGameFramework {
    */
   onBeforeGameHook() {
     this.beforeGameHook?.(this.getGame())
+  }
+
+  /**
+   * 觸發遊戲開始後的 hook
+   * 若已註冊 gameStartHook，則執行該回呼
+   */
+  onGameStartHook() {
+    this.gameStartHook?.(this.getGame())
   }
 
   /**
@@ -116,6 +129,8 @@ export class CardGameFramework {
     this.onBeforeGameHook()
 
     await this.game.setup()
+
+    this.onGameStartHook()
 
     while (!this.game.isGameOver()) {
       this.onBeforeTurnHook()

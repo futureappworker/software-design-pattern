@@ -23,7 +23,7 @@ export class AIPlayer extends Player {
     return this.game
   }
 
-  async chooseCard(): Promise<Card> {
+  async chooseCard(): Promise<Card[]> {
     return this.aiChooseCardStrategy.chooseCard(this.getGame())
   }
 }

@@ -100,6 +100,15 @@ export class TableArea {
   }
 
   /**
+   * 將多張卡加入指定玩家的桌面區域
+   * @param playerId 玩家 ID
+   * @param cards 要加入的卡片列表
+   */
+  addCardsToPlayerArea(playerId: PlayerId, cards: Card[]) {
+    this.playerAreas.get(playerId)?.push(...cards)
+  }
+
+  /**
    * 取走桌面中央牌堆的所有卡並清空牌堆
    * @returns 中央牌堆中的卡片列表
    */

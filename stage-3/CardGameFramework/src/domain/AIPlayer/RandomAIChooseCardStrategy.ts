@@ -3,7 +3,7 @@ import type { Game } from '../Game/Game'
 import type { AIChooseCardStrategy } from './AIChooseCardStrategy'
 
 export class RandomAIChooseCardStrategy implements AIChooseCardStrategy {
-  chooseCard(game: Game): Card {
+  chooseCard(game: Game): Card[] {
     const hand = game.getCurrentPlayer().getHand()
 
     if (hand.length === 0) {
@@ -11,6 +11,6 @@ export class RandomAIChooseCardStrategy implements AIChooseCardStrategy {
     }
 
     const index = Math.floor(Math.random() * hand.length)
-    return game.getCurrentPlayer().removeCardFromHandAt(index)
+    return [game.getCurrentPlayer().removeCardFromHandAt(index)]
   }
 }

@@ -12,9 +12,10 @@ export class Hand {
     this.cards = [...cards]
   }
 
-  drawCardFromDeck(deck: Deck) {
+  drawCardFromDeck(deck: Deck): Card {
     const card = deck.drawCard()
     this.addCard(card)
+    return card
   }
 
   addCard(card: Card) {
