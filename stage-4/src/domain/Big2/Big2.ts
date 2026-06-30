@@ -201,8 +201,8 @@ export class Big2 {
   async setupPlayers() {
     // 輸入每個玩家的名稱 (Name)
     for (let i = this.players.length; i < 4; i++) {
-      const name = await this.promptPlayerName(`P${i + 1}`)
       const isHuman = await this.promptPlayerType(`P${i + 1}`)
+      const name = await this.promptPlayerName(`P${i + 1}`)
       const player = isHuman ? new Human({ name }) : new AI({ name })
       this.addPlayer(player)
     }
