@@ -46,7 +46,7 @@ const playRound = async (game: Game) => {
 
   // 玩家出的牌必須與檯面上最新的牌的顏色一樣，或是數字一樣。出完的牌就會成為檯面上最新的牌。
   const cards = (await player.chooseCard()) as UNOCard[]
- 
+
   if (cards.length > 0) {
     // 將牌加入檯面
     tableArea.addCardsToCenterPile(cards)

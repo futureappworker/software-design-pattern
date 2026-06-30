@@ -19,6 +19,8 @@
 
 - `stage-3`/`UNO` - 牌類遊戲框架 - 簡易 UNO
 
+- `stage-3` - 副本四：大老二撲克牌遊戲
+
 ## 執行
 
 OOP 技法一：依賴
@@ -79,6 +81,11 @@ pnpm exec tsx stage-3/PlayingCard/src/index.ts
 副本三：牌類遊戲框架 - 簡易 UNO
 ```bash
 pnpm exec tsx stage-3/UNO/src/index.ts
+```
+
+副本四：大老二撲克牌遊戲
+```bash
+pnpm exec tsx stage-4/src/index.ts
 ```
 
 ## Node.js 環境執行 TypeScript
