@@ -32,6 +32,7 @@ type Big2Props = {
   parseCardPatternHandler: ParseCardPatternHandler
   compareCardPatternHandler: CompareCardPatternHandler
   findPlayablePatternsHandler: FindPlayablePatternsHandler
+  deck?: Deck
   players?: Player[]
   currentPlayerIndex?: number
 }
@@ -49,10 +50,11 @@ export class Big2 {
     parseCardPatternHandler,
     compareCardPatternHandler,
     findPlayablePatternsHandler,
+    deck,
     players = [],
     currentPlayerIndex = 0,
   }: Big2Props) {
-    this.deck = new Deck({})
+    this.setDeck(deck)
     this.round = new Round({})
     this.ruleEngine = new RuleEngine({
       isPlayableHandler,
@@ -69,6 +71,22 @@ export class Big2 {
 
   getDeck() {
     return this.deck
+  }
+
+  setDeck(deck?: Deck) {
+    if (deck) {
+      // deck 的 cards 長度必需 52
+      shouldBeWithinRange({
+        name: 'deck cards length',
+        num: deck.getCards().length,
+        inclusiveMin: 52,
+        inclusiveMax: 52,
+      })
+      this.deck = deck
+    } else {
+      this.deck = new Deck({})
+      this.deck.initialize()
+    }
   }
 
   getRound() {
@@ -134,7 +152,9 @@ export class Big2 {
     const gameLogger = this.getGameLogger()
     const round = this.getRound()
 
-    deck.initialize()
+    if (deck.isEmpty() || deck.size() !== 52) {
+      deck.initialize()
+    }
 
     await this.setupPlayers()
 

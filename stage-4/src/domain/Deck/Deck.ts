@@ -56,4 +56,8 @@ export class Deck {
   isEmpty() {
     return this.cards.length === 0
   }
+
+  size() {
+    return this.cards.length
+  }
 }
