@@ -53,7 +53,6 @@ export class Big2 {
     currentPlayerIndex = 0,
   }: Big2Props) {
     this.deck = new Deck({})
-    this.deck.initialize()
     this.round = new Round({})
     this.ruleEngine = new RuleEngine({
       isPlayableHandler,
@@ -134,6 +133,8 @@ export class Big2 {
     const deck = this.getDeck()
     const gameLogger = this.getGameLogger()
     const round = this.getRound()
+
+    deck.initialize()
 
     await this.setupPlayers()
 
