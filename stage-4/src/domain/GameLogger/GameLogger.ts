@@ -1,6 +1,8 @@
 import type { Card } from '../Card/Card'
 import { rankSymbols } from '../Card/Rank'
 import { suitSymbols } from '../Card/Suit'
+import { CardPattern } from '../CardPattern/CardPattern'
+import { cardPatternTypeSymbols } from '../CardPattern/CardPatternType'
 
 export class GameLogger {
   logRoundStart() {
@@ -35,6 +37,21 @@ export class GameLogger {
 
     console.log(indexLine)
     console.log(cardLabels.join(' '))
+  }
+
+  logPlay(playerName: string, cardPattern: CardPattern) {
+    // 玩家 <玩家的名字> 打出了 <牌型名稱> <花色>[<數字>] <花色>[<數字>] <花色>[<數字>] ...
+
+    // <牌型名稱> 為該牌型的中文名稱，可能為單張、對子、順子或是葫蘆。
+    // <牌型名稱> 隨後接著的是牌型中包含的牌，以小到大依序由左至右排序。
+
+    const cardLabels = cardPattern.getCards().map((card) => {
+      const suit = suitSymbols[card.getSuit()]
+      const rank = rankSymbols[card.getRank()]
+      return `${suit}[${rank}]`
+    })
+
+    console.log(`玩家 ${playerName} 打出了 ${cardPatternTypeSymbols[cardPattern.getType()]} ${cardLabels.join(' ')}`)
   }
 
   logInvalidPlay() {

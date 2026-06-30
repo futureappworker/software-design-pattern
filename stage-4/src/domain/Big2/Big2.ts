@@ -271,6 +271,8 @@ export class Big2 {
         throw new Error('Card pattern is null')
       }
 
+      gameLogger.logPlay(playerName, cardPattern)
+
       hand.removeCards(cardPattern.getCards())
 
       round.setTopPlay(cardPattern)
