@@ -1,7 +1,7 @@
 import type { Card } from '../Card/Card'
 import { rankSymbols } from '../Card/Rank'
 import { suitSymbols } from '../Card/Suit'
-import { CardPattern } from '../CardPattern/CardPattern'
+import type { CardPattern } from '../CardPattern/CardPattern'
 import { cardPatternTypeSymbols } from '../CardPattern/CardPatternType'
 
 export class GameLogger {
@@ -51,7 +51,9 @@ export class GameLogger {
       return `${suit}[${rank}]`
     })
 
-    console.log(`玩家 ${playerName} 打出了 ${cardPatternTypeSymbols[cardPattern.getType()]} ${cardLabels.join(' ')}`)
+    console.log(
+      `玩家 ${playerName} 打出了 ${cardPatternTypeSymbols[cardPattern.getType()]} ${cardLabels.join(' ')}`,
+    )
   }
 
   logInvalidPlay() {
