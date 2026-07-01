@@ -62,3 +62,26 @@ export function isFullHouse(cards: Card[]): boolean {
   const counts = [...rankCounts.values()].sort((a, b) => a - b)
   return counts[0] === 2 && counts[1] === 3
 }
+
+export function sortFullHouseCards(cards: Card[]): Card[] {
+  const cardsByRank = new Map<number, Card[]>()
+  for (const card of cards) {
+    const rank = card.getRank()
+    const group = cardsByRank.get(rank) ?? []
+    group.push(card)
+    cardsByRank.set(rank, group)
+  }
+
+  const sortCards = (group: Card[]) =>
+    [...group].sort((a, b) => {
+      const rankDiff = a.getRank() - b.getRank()
+      if (rankDiff !== 0) {
+        return rankDiff
+      }
+      return a.getSuit() - b.getSuit()
+    })
+
+  return [...cardsByRank.keys()]
+    .sort((a, b) => a - b)
+    .flatMap((rank) => sortCards(cardsByRank.get(rank) ?? []))
+}

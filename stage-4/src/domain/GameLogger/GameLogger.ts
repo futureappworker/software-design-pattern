@@ -11,6 +11,22 @@ export class GameLogger {
     console.log('新的回合開始了。')
   }
 
+  logHand(sortedCards: Card[]) {
+    const cardLabels = sortedCards.map((card) => {
+      const suit = suitSymbols[card.getSuit()]
+      const rank = rankSymbols[card.getRank()]
+      return `${suit}[${rank}]`
+    })
+
+    const indexLine = cardLabels
+      .map((label, index) => String(index).padEnd(label.length))
+      .join(' ')
+      .trimEnd()
+
+    console.log(indexLine)
+    console.log(cardLabels.join(' '))
+  }
+
   logPlayerTurnStart(playerName: string, sortedCards: Card[]) {
     // 首先輸出：
     // 輪到<玩家的名字>了
@@ -25,18 +41,7 @@ export class GameLogger {
     // 並且每一張牌之間都隔了一個空白，
     // 然後在第一行中，每一個手牌索引都置左對齊了每一張手牌的花色。
 
-    const cardLabels = sortedCards.map((card) => {
-      const suit = suitSymbols[card.getSuit()]
-      const rank = rankSymbols[card.getRank()]
-      return `${suit}[${rank}]`
-    })
-
-    const indexLine = cardLabels
-      .map((label, index) => String(index).padEnd(label.length))
-      .join(' ')
-
-    console.log(indexLine)
-    console.log(cardLabels.join(' '))
+    this.logHand(sortedCards)
   }
 
   logPlay(playerName: string, cardPattern: CardPattern) {

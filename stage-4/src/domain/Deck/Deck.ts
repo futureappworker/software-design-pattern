@@ -39,7 +39,7 @@ export class Deck {
   }
 
   draw(): Card {
-    const card = this.cards.shift()
+    const card = this.cards.pop()
     if (card === undefined) {
       throw new Error('No cards left in deck')
     }

@@ -7,20 +7,10 @@ import { FindPlayablePatternsFullHouseHandler } from './domain/RuleEngine/FindPl
 import { FindPlayablePatternsPairHandler } from './domain/RuleEngine/FindPlayablePatternsHandler/FindPlayablePatternsPairHandler/FindPlayablePatternsPairHandler'
 import { FindPlayablePatternsSingleHandler } from './domain/RuleEngine/FindPlayablePatternsHandler/FindPlayablePatternsSingleHandler/FindPlayablePatternsSingleHandler'
 import { FindPlayablePatternsStraightHandler } from './domain/RuleEngine/FindPlayablePatternsHandler/FindPlayablePatternsStraightHandler/FindPlayablePatternsStraightHandler'
-import { IsPlayableFullHouseHandler } from './domain/RuleEngine/IsPlayableHandler/IsPlayableFullHouseHandler/IsPlayableFullHouseHandler'
-import { IsPlayablePairHandler } from './domain/RuleEngine/IsPlayableHandler/IsPlayablePairHandler/IsPlayablePairHandler'
-import { IsPlayableSingleHandler } from './domain/RuleEngine/IsPlayableHandler/IsPlayableSingleHandler/IsPlayableSingleHandler'
-import { IsPlayableStraightHandler } from './domain/RuleEngine/IsPlayableHandler/IsPlayableStraightHandler/IsPlayableStraightHandler'
 import { ParseCardPatternFullHouseHandler } from './domain/RuleEngine/ParseCardPatternHandler/ParseCardPatternFullHouseHandler/ParseCardPatternFullHouseHandler'
 import { ParseCardPatternPairHandler } from './domain/RuleEngine/ParseCardPatternHandler/ParseCardPatternPairHandler/ParseCardPatternPairHandler'
 import { ParseCardPatternSingleHandler } from './domain/RuleEngine/ParseCardPatternHandler/ParseCardPatternSingleHandler/ParseCardPatternSingleHandler'
 import { ParseCardPatternStraightHandler } from './domain/RuleEngine/ParseCardPatternHandler/ParseCardPatternStraightHandler/ParseCardPatternStraightHandler'
-
-const isPlayableHandler = new IsPlayableSingleHandler(
-  new IsPlayablePairHandler(
-    new IsPlayableStraightHandler(new IsPlayableFullHouseHandler(null)),
-  ),
-)
 
 const parseCardPatternHandler = new ParseCardPatternSingleHandler(
   new ParseCardPatternPairHandler(
@@ -47,7 +37,6 @@ const findPlayablePatternsHandler = new FindPlayablePatternsSingleHandler(
 )
 
 const big2 = new Big2({
-  isPlayableHandler,
   parseCardPatternHandler,
   compareCardPatternHandler,
   findPlayablePatternsHandler,

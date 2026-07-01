@@ -15,7 +15,6 @@ import { ChooseResultType, type Player } from '../Player/Player'
 import { Round } from '../Round/Round'
 import type { CompareCardPatternHandler } from '../RuleEngine/CompareCardPatternHandler/CompareCardPatternHandler'
 import type { FindPlayablePatternsHandler } from '../RuleEngine/FindPlayablePatternsHandler/FindPlayablePatternsHandler'
-import type { IsPlayableHandler } from '../RuleEngine/IsPlayableHandler/IsPlayableHandler'
 import type { ParseCardPatternHandler } from '../RuleEngine/ParseCardPatternHandler/ParseCardPatternHandler'
 import { RuleEngine } from '../RuleEngine/RuleEngine'
 
@@ -28,7 +27,7 @@ function getReadline() {
 }
 
 type Big2Props = {
-  isPlayableHandler: IsPlayableHandler
+  isTestMode?: boolean
   parseCardPatternHandler: ParseCardPatternHandler
   compareCardPatternHandler: CompareCardPatternHandler
   findPlayablePatternsHandler: FindPlayablePatternsHandler
@@ -38,6 +37,7 @@ type Big2Props = {
 }
 
 export class Big2 {
+  private isTestMode: boolean = false
   private deck!: Deck
   private round: Round
   private ruleEngine: RuleEngine
@@ -46,7 +46,7 @@ export class Big2 {
   private currentPlayerIndex: number = 0
 
   constructor({
-    isPlayableHandler,
+    isTestMode = false,
     parseCardPatternHandler,
     compareCardPatternHandler,
     findPlayablePatternsHandler,
@@ -54,10 +54,10 @@ export class Big2 {
     players = [],
     currentPlayerIndex = 0,
   }: Big2Props) {
+    this.isTestMode = isTestMode
     this.setDeck(deck)
     this.round = new Round({})
     this.ruleEngine = new RuleEngine({
-      isPlayableHandler,
       parseCardPatternHandler,
       compareCardPatternHandler,
       findPlayablePatternsHandler,
@@ -158,8 +158,10 @@ export class Big2 {
 
     await this.setupPlayers()
 
-    // 洗牌
-    deck.shuffle()
+    if (!this.isTestMode) {
+      // 洗牌
+      deck.shuffle()
+    }
 
     // 發牌
     this.dealCards()

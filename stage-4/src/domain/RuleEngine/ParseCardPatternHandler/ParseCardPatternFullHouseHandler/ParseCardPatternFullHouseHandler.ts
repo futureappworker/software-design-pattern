@@ -1,4 +1,7 @@
-import { isFullHouse } from '../../../../utils/ruleEngineUtils'
+import {
+  isFullHouse,
+  sortFullHouseCards,
+} from '../../../../utils/ruleEngineUtils'
 import type { Card } from '../../../Card/Card'
 import { CardPattern } from '../../../CardPattern/CardPattern'
 import { CardPatternType } from '../../../CardPattern/CardPatternType'
@@ -12,7 +15,7 @@ export class ParseCardPatternFullHouseHandler extends ParseCardPatternHandler {
     if (isFullHouse(cards)) {
       return new CardPattern({
         type: CardPatternType.FullHouse,
-        cards,
+        cards: sortFullHouseCards(cards),
       })
     }
 
