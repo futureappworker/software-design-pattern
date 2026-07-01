@@ -7,6 +7,14 @@ import type { RuleEngine } from '../../RuleEngine/RuleEngine'
 import { type ChooseResult, ChooseResultType, Player } from '../Player'
 
 export class Human extends Player {
+  /**
+   * 透過 CLI 輸入選擇要出的牌或 PASS。
+   * @param topPlay - 目前檯面上的頂牌，新回合時為 null。
+   * @param topPlayerIndex - 出頂牌的玩家索引，新回合時為 -1。
+   * @param ruleEngine - 規則引擎，用於驗證與解析牌型。
+   * @param gameLogger - 遊戲日誌，用於輸出提示與錯誤訊息。
+   * @returns 玩家的選擇結果。
+   */
   async chooseCards(
     topPlay: CardPattern | null,
     topPlayerIndex: number,

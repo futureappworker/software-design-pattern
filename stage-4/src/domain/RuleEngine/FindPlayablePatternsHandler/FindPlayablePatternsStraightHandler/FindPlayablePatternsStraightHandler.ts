@@ -57,6 +57,12 @@ function toStraightPatterns(straights: Card[][]): CardPattern[] {
 }
 
 export class FindPlayablePatternsStraightHandler extends FindPlayablePatternsHandler {
+  /**
+   * 從手牌中找出可出的順子牌型，否則交給下一個處理器。
+   * @param cards - 玩家的手牌。
+   * @param topPlay - 可選的頂牌，未提供時回傳所有順子牌型。
+   * @returns 可出的順子牌型陣列。
+   */
   findPlayablePatterns(
     cards: Card[],
     topPlay?: CardPattern | null,

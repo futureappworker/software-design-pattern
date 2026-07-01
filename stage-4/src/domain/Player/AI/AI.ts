@@ -14,6 +14,15 @@ function includesClubThree(pattern: CardPattern): boolean {
 }
 
 export class AI extends Player {
+  /**
+   * 自動從可出的牌型中隨機選擇一組，或選擇 PASS。
+   * @param topPlay - 目前檯面上的頂牌，新回合時為 null。
+   * @param topPlayerIndex - 出頂牌的玩家索引，新回合時為 -1。
+   * @param ruleEngine - 規則引擎，用於找出可出的牌型。
+   * @param _gameLogger - 遊戲日誌（AI 不使用）。
+   * @returns 玩家的選擇結果。
+   * @throws 新回合中無可出的牌型時拋出錯誤。
+   */
   async chooseCards(
     topPlay: CardPattern | null,
     topPlayerIndex: number,

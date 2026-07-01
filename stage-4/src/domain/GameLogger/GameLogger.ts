@@ -5,12 +5,19 @@ import type { CardPattern } from '../CardPattern/CardPattern'
 import { cardPatternTypeSymbols } from '../CardPattern/CardPatternType'
 
 export class GameLogger {
+  /**
+   * 輸出新回合開始的訊息。
+   */
   logRoundStart() {
     // 輸出單行：
     // 新的回合開始了。
     console.log('新的回合開始了。')
   }
 
+  /**
+   * 以索引對齊格式輸出手牌。
+   * @param sortedCards - 已排序的手牌。
+   */
   logHand(sortedCards: Card[]) {
     const cardLabels = sortedCards.map((card) => {
       const suit = suitSymbols[card.getSuit()]
@@ -27,6 +34,11 @@ export class GameLogger {
     console.log(cardLabels.join(' '))
   }
 
+  /**
+   * 輸出玩家回合開始訊息及手牌。
+   * @param playerName - 玩家名稱。
+   * @param sortedCards - 已排序的手牌。
+   */
   logPlayerTurnStart(playerName: string, sortedCards: Card[]) {
     // 首先輸出：
     // 輪到<玩家的名字>了
@@ -44,6 +56,11 @@ export class GameLogger {
     this.logHand(sortedCards)
   }
 
+  /**
+   * 輸出玩家出牌訊息。
+   * @param playerName - 玩家名稱。
+   * @param cardPattern - 打出的牌型。
+   */
   logPlay(playerName: string, cardPattern: CardPattern) {
     // 玩家 <玩家的名字> 打出了 <牌型名稱> <花色>[<數字>] <花色>[<數字>] <花色>[<數字>] ...
 
@@ -61,18 +78,32 @@ export class GameLogger {
     )
   }
 
+  /**
+   * 輸出不合法牌型的錯誤訊息。
+   */
   logInvalidPlay() {
     console.log('此牌型不合法，請再嘗試一次。')
   }
 
+  /**
+   * 輸出玩家 PASS 訊息。
+   * @param playerName - 玩家名稱。
+   */
   logPlayerPass(playerName: string) {
     console.log(`玩家 ${playerName} PASS.`)
   }
 
+  /**
+   * 輸出在新回合中 PASS 不合法的錯誤訊息。
+   */
   logInvalidPass() {
     console.log('你不能在新的回合中喊 PASS')
   }
 
+  /**
+   * 輸出遊戲結束及勝利者訊息。
+   * @param winnerName - 勝利者名稱。
+   */
   logGameOver(winnerName: string) {
     console.log(`遊戲結束，遊戲的勝利者為 ${winnerName}`)
   }

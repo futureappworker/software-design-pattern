@@ -34,6 +34,12 @@ function compareCards(a: CardPattern, b: CardPattern): number {
 }
 
 export class CompareCardPatternFullHouseHandler extends CompareCardPatternHandler {
+  /**
+   * 比較兩個葫蘆牌型的大小，否則交給下一個處理器。
+   * @param a - 第一個牌型。
+   * @param b - 第二個牌型。
+   * @returns 正數表示 a 較大，負數表示 b 較大，0 表示相等。
+   */
   compareCardPattern(a: CardPattern, b: CardPattern): number {
     // 葫蘆 (Full house)
 

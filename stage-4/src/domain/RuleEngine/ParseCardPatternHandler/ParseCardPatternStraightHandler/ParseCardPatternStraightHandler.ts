@@ -5,6 +5,12 @@ import { CardPatternType } from '../../../CardPattern/CardPatternType'
 import { ParseCardPatternHandler } from '../ParseCardPatternHandler'
 
 export class ParseCardPatternStraightHandler extends ParseCardPatternHandler {
+  /**
+   * 嘗試將牌解析為順子牌型，否則交給下一個處理器。
+   * @param cards - 要解析的牌。
+   * @returns 解析後的牌型。
+   * @throws 責任鏈末端仍無法解析時拋出錯誤。
+   */
   parseCardPattern(cards: Card[]): CardPattern {
     // 順子 (Straight)
 

@@ -33,6 +33,10 @@ export class Big2 {
   private players: Player[] = []
   private currentPlayerIndex: number = 0
 
+  /**
+   * 建立大老二遊戲。
+   * @param props - 遊戲設定，包含規則引擎處理器、牌堆、玩家等。
+   */
   constructor({
     isTestMode = false,
     parseCardPatternHandler,
@@ -57,10 +61,18 @@ export class Big2 {
     }
   }
 
+  /**
+   * 取得牌堆。
+   * @returns 牌堆。
+   */
   getDeck() {
     return this.deck
   }
 
+  /**
+   * 設定牌堆，未提供時建立並初始化 52 張牌。
+   * @param deck - 可選的牌堆，須含 52 張牌。
+   */
   setDeck(deck?: Deck) {
     if (deck) {
       // deck 的 cards 長度必需 52
@@ -77,22 +89,42 @@ export class Big2 {
     }
   }
 
+  /**
+   * 取得回合狀態。
+   * @returns 回合狀態。
+   */
   getRound() {
     return this.round
   }
 
+  /**
+   * 取得規則引擎。
+   * @returns 規則引擎。
+   */
   getRuleEngine() {
     return this.ruleEngine
   }
 
+  /**
+   * 取得遊戲日誌。
+   * @returns 遊戲日誌。
+   */
   getGameLogger() {
     return this.gameLogger
   }
 
+  /**
+   * 取得所有玩家的副本。
+   * @returns 玩家陣列。
+   */
   getPlayers() {
     return [...this.players]
   }
 
+  /**
+   * 設定玩家列表。
+   * @param players - 玩家陣列，最多 4 位。
+   */
   setPlayers(players: Player[]) {
     shouldBeWithinRange({
       name: 'players',
@@ -104,6 +136,10 @@ export class Big2 {
     this.players = [...players]
   }
 
+  /**
+   * 加入一位玩家。
+   * @param player - 要加入的玩家。
+   */
   addPlayer(player: Player) {
     const players = this.getPlayers()
     shouldBeWithinRange({
@@ -116,10 +152,18 @@ export class Big2 {
     this.players.push(player)
   }
 
+  /**
+   * 取得目前出牌玩家的索引。
+   * @returns 目前玩家的索引。
+   */
   getCurrentPlayerIndex() {
     return this.currentPlayerIndex
   }
 
+  /**
+   * 設定目前出牌玩家的索引。
+   * @param currentPlayerIndex - 玩家索引。
+   */
   setCurrentPlayerIndex(currentPlayerIndex: number) {
     shouldBeWithinRange({
       name: 'currentPlayerIndex',
@@ -131,10 +175,17 @@ export class Big2 {
     this.currentPlayerIndex = currentPlayerIndex
   }
 
+  /**
+   * 取得目前出牌的玩家。
+   * @returns 目前出牌的玩家。
+   */
   getCurrentPlayer(): Player {
     return this.players[this.currentPlayerIndex]
   }
 
+  /**
+   * 開始遊戲，包含發牌、回合循環與勝負判定。
+   */
   async start() {
     const deck = this.getDeck()
     const gameLogger = this.getGameLogger()
@@ -188,6 +239,9 @@ export class Big2 {
     gameLogger.logGameOver(winner.getName())
   }
 
+  /**
+   * 透過 CLI 設定玩家，補足至 4 位。
+   */
   async setupPlayers() {
     // 輸入每個玩家的名稱 (Name)
     for (let i = this.players.length; i < 4; i++) {
@@ -198,6 +252,9 @@ export class Big2 {
     }
   }
 
+  /**
+   * 將牌堆中的牌輪流發給所有玩家。
+   */
   dealCards() {
     const deck = this.getDeck()
     // 將 deck 的牌輪流發給四位玩家直到牌堆空 (Empty) 了為止
@@ -209,6 +266,11 @@ export class Big2 {
     }
   }
 
+  /**
+   * 透過 CLI 詢問玩家名稱。
+   * @param label - 玩家標籤（如 P1）。
+   * @returns 玩家輸入的名稱。
+   */
   private async promptPlayerName(label: string): Promise<string> {
     // cli 尋問玩家的名稱 (Name)
     const rl = getReadline()
@@ -226,6 +288,11 @@ export class Big2 {
     }
   }
 
+  /**
+   * 透過 CLI 詢問玩家類型（AI 或 Human）。
+   * @param label - 玩家標籤（如 P1）。
+   * @returns 為 Human 時回傳 true，為 AI 時回傳 false。
+   */
   private async promptPlayerType(label: string): Promise<boolean> {
     const rl = getReadline()
     const answer = await rl.question(`${label} 玩家類型？(1) AI (2) Human: `)
@@ -241,6 +308,9 @@ export class Big2 {
     }
   }
 
+  /**
+   * 將目前出牌玩家切換至下一位。
+   */
   advanceToNextPlayer() {
     // 遊戲中有四位玩家
     // 使用數字 {0,1,2,3} 來索引這四位玩家假設目前輪到了玩家 i
@@ -249,6 +319,9 @@ export class Big2 {
     this.setCurrentPlayerIndex(nextIndex)
   }
 
+  /**
+   * 執行目前玩家的出牌回合。
+   */
   async play() {
     const player = this.getCurrentPlayer()
     const gameLogger = this.getGameLogger()
@@ -291,6 +364,13 @@ export class Big2 {
     }
   }
 
+  /**
+   * 找出持有指定牌的第一位玩家索引。
+   * @param suit - 牌的花色。
+   * @param rank - 牌的點數。
+   * @returns 玩家索引。
+   * @throws 找不到持有該牌的玩家時拋出錯誤。
+   */
   findPlayerIndexOfCard(suit: Suit, rank: Rank): number {
     const playerIndex = this.players.findIndex((player) =>
       player
@@ -308,11 +388,20 @@ export class Big2 {
     return playerIndex
   }
 
+  /**
+   * 檢查是否已有玩家出完手牌。
+   * @returns 有玩家手牌為 0 時回傳 true。
+   */
   hasWinner(): boolean {
     // 任一玩家手牌為 0
     return this.players.some((player) => player.getHand().isEmpty())
   }
 
+  /**
+   * 取得勝利者。
+   * @returns 手牌為空的玩家。
+   * @throws 尚無勝利者時拋出錯誤。
+   */
   getWinner(): Player {
     // 玩家手牌為 0, 回傳該玩家
     const winner = this.players.find((player) => player.getHand().isEmpty())
@@ -322,6 +411,10 @@ export class Big2 {
     return winner
   }
 
+  /**
+   * 取得勝利者名稱。
+   * @returns 勝利者名稱。
+   */
   getWinnerName(): string {
     return this.getWinner().getName()
   }
