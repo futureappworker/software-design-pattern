@@ -1,8 +1,4 @@
-import { stdin as input, stdout as output } from 'node:process'
-import {
-  createInterface,
-  type Interface as ReadlineInterface,
-} from 'node:readline/promises'
+import { getReadline } from '../../utils/readline'
 import { shouldBeAlphanumericOrChinese } from '../../utils/shouldBeAlphanumericOrChinese'
 import { shouldBeWithinRange } from '../../utils/shouldBeWithinRange'
 import { Rank, rankSymbols } from '../Card/Rank'
@@ -17,14 +13,6 @@ import type { CompareCardPatternHandler } from '../RuleEngine/CompareCardPattern
 import type { FindPlayablePatternsHandler } from '../RuleEngine/FindPlayablePatternsHandler/FindPlayablePatternsHandler'
 import type { ParseCardPatternHandler } from '../RuleEngine/ParseCardPatternHandler/ParseCardPatternHandler'
 import { RuleEngine } from '../RuleEngine/RuleEngine'
-
-let readlineInterface: ReadlineInterface | null = null
-function getReadline() {
-  if (!readlineInterface) {
-    readlineInterface = createInterface({ input, output })
-  }
-  return readlineInterface
-}
 
 type Big2Props = {
   isTestMode?: boolean

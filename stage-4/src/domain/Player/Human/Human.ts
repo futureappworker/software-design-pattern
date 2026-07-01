@@ -1,23 +1,10 @@
-import { stdin as input, stdout as output } from 'node:process'
-import {
-  createInterface,
-  type Interface as ReadlineInterface,
-} from 'node:readline/promises'
+import { getReadline } from '../../../utils/readline'
 import { Rank } from '../../Card/Rank'
 import { Suit } from '../../Card/Suit'
 import type { CardPattern } from '../../CardPattern/CardPattern'
 import type { GameLogger } from '../../GameLogger/GameLogger'
 import type { RuleEngine } from '../../RuleEngine/RuleEngine'
 import { type ChooseResult, ChooseResultType, Player } from '../Player'
-
-let readlineInterface: ReadlineInterface | null = null
-
-function getReadline() {
-  if (!readlineInterface) {
-    readlineInterface = createInterface({ input, output })
-  }
-  return readlineInterface
-}
 
 export class Human extends Player {
   async chooseCards(
