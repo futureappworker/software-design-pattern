@@ -1,65 +1,27 @@
-import { Rank } from '../../Card/Rank'
-import { Suit } from '../../Card/Suit'
-import type { CardPattern } from '../../CardPattern/CardPattern'
-import type { GameLogger } from '../../GameLogger/GameLogger'
-import type { RuleEngine } from '../../RuleEngine/RuleEngine'
-import { type ChooseResult, ChooseResultType, Player } from '../Player'
-
-function includesClubThree(pattern: CardPattern): boolean {
-  return pattern
-    .getCards()
-    .some(
-      (card) => card.getSuit() === Suit.Club && card.getRank() === Rank.Three,
-    )
-}
+import type { Card } from '../../Card/Card'
+import { type ChooseCardsContext, Player } from '../Player'
 
 export class AI extends Player {
   /**
    * 自動從可出的牌型中隨機選擇一組，或選擇 PASS。
-   * @param topPlay - 目前檯面上的頂牌，新回合時為 null。
-   * @param topPlayerIndex - 出頂牌的玩家索引，新回合時為 -1。
-   * @param ruleEngine - 規則引擎，用於找出可出的牌型。
-   * @param _gameLogger - 遊戲日誌（AI 不使用）。
-   * @returns 玩家的選擇結果。
+   * @param context - 選牌上下文，使用其中的 playablePatterns 與 canPass。
+   * @returns 選擇的牌，null 表示 PASS。
    * @throws 新回合中無可出的牌型時拋出錯誤。
    */
-  async chooseCards(
-    topPlay: CardPattern | null,
-    topPlayerIndex: number,
-    ruleEngine: RuleEngine,
-    _gameLogger: GameLogger,
-  ): Promise<ChooseResult> {
-    if (!topPlay) {
-      let playablePatterns = ruleEngine.findPlayablePatterns(
-        this.getHand().getCards(),
-      )
-
-      // 整局第一手，必須含梅花 3
-      if (topPlayerIndex === -1) {
-        playablePatterns = playablePatterns.filter(includesClubThree)
-      }
-
-      if (playablePatterns.length === 0) {
+  async chooseCards({
+    playablePatterns,
+    canPass,
+  }: ChooseCardsContext): Promise<Card[] | null> {
+    if (playablePatterns.length === 0) {
+      if (!canPass) {
         throw new Error('AI cannot pass in a new round')
       }
-      const randomIndex = Math.floor(Math.random() * playablePatterns.length)
-      return {
-        type: ChooseResultType.Play,
-        cardPattern: playablePatterns[randomIndex],
-      }
+      // 新回合中無可出的牌型時，選擇 PASS
+      return null
     }
 
-    const playablePatterns = ruleEngine.findPlayablePatterns(
-      this.getHand().getCards(),
-      topPlay,
-    )
-    if (playablePatterns.length === 0) {
-      return { type: ChooseResultType.Pass }
-    }
+    // 隨機選擇一組可出的牌型
     const randomIndex = Math.floor(Math.random() * playablePatterns.length)
-    return {
-      type: ChooseResultType.Play,
-      cardPattern: playablePatterns[randomIndex],
-    }
+    return playablePatterns[randomIndex].getCards()
   }
 }

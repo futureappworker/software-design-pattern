@@ -1,48 +1,25 @@
 import { getReadline } from '../../../utils/readline'
-import { Rank } from '../../Card/Rank'
-import { Suit } from '../../Card/Suit'
-import type { CardPattern } from '../../CardPattern/CardPattern'
-import type { GameLogger } from '../../GameLogger/GameLogger'
-import type { RuleEngine } from '../../RuleEngine/RuleEngine'
-import { type ChooseResult, ChooseResultType, Player } from '../Player'
+import type { Card } from '../../Card/Card'
+import { type ChooseCardsContext, Player } from '../Player'
 
 export class Human extends Player {
   /**
    * 透過 CLI 輸入選擇要出的牌或 PASS。
-   * @param topPlay - 目前檯面上的頂牌，新回合時為 null。
-   * @param topPlayerIndex - 出頂牌的玩家索引，新回合時為 -1。
-   * @param ruleEngine - 規則引擎，用於驗證與解析牌型。
-   * @param gameLogger - 遊戲日誌，用於輸出提示與錯誤訊息。
-   * @returns 玩家的選擇結果。
+   * @param context - 選牌上下文，使用其中的 sortedHand。
+   * @returns 選擇的牌，null 表示 PASS。
    */
-  async chooseCards(
-    topPlay: CardPattern | null,
-    topPlayerIndex: number,
-    ruleEngine: RuleEngine,
-    gameLogger: GameLogger,
-  ): Promise<ChooseResult> {
-    const hand = this.getHand()
-    const sortedCards = hand.getSortedCards()
-
+  async chooseCards({
+    sortedHand,
+  }: ChooseCardsContext): Promise<Card[] | null> {
     const rl = getReadline()
     const answer = (await rl.question('')).trim()
 
-    const retry = () => {
-      // 先排序好，再輸出玩家的手牌
-      gameLogger.logHand(hand.getSortedCards())
-      return this.chooseCards(topPlay, topPlayerIndex, ruleEngine, gameLogger)
-    }
-
     // 如果輸入 -1，則表示要 pass
     if (answer === '-1') {
-      // 如果選擇 PASS, 而且 round.topPlay 是空的，則不合法
-      if (topPlay === null) {
-        gameLogger.logInvalidPass()
-        return retry()
-      }
-      return { type: ChooseResultType.Pass }
+      return null
     }
 
+    // 解析輸入的索引
     const indices = answer
       .split(' ')
       .filter((part) => part.length > 0)
@@ -52,50 +29,15 @@ export class Human extends Player {
       indices.length === 0 ||
       indices.some(
         (index) =>
-          !Number.isInteger(index) || index < 0 || index >= sortedCards.length,
+          !Number.isInteger(index) || index < 0 || index >= sortedHand.length,
       )
 
-    // 如果輸入的索引有無效的，則不合法
+    // 如果有無效的索引，則不合法
     if (hasInvalidIndex) {
-      gameLogger.logInvalidPlay()
-      return retry()
+      return []
     }
 
-    const selectedCards = indices.map((index) => sortedCards[index])
-
-    // 如果有 topPlay，而且牌型不合法，則不合法
-    if (topPlay) {
-      if (!ruleEngine.isPlayable(selectedCards, topPlay)) {
-        gameLogger.logInvalidPlay()
-        return retry()
-      }
-    }
-
-    // 沒有 topPlay，則檢查是否合法
-    if (!topPlay) {
-      try {
-        ruleEngine.parseCardPattern(selectedCards)
-      } catch {
-        gameLogger.logInvalidPlay()
-        return retry()
-      }
-    }
-
-    // 整局第一手，必須含梅花 3
-    if (topPlay === null && topPlayerIndex === -1) {
-      const hasClubThree = selectedCards.some(
-        (card) => card.getSuit() === Suit.Club && card.getRank() === Rank.Three,
-      )
-      // 如果沒有梅花 3，則不合法
-      if (!hasClubThree) {
-        gameLogger.logInvalidPlay()
-        return retry()
-      }
-    }
-
-    return {
-      type: ChooseResultType.Play,
-      cardPattern: ruleEngine.parseCardPattern(selectedCards),
-    }
+    // 返回選擇的牌
+    return indices.map((index) => sortedHand[index])
   }
 }

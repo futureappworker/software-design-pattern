@@ -1,13 +1,15 @@
 import { getReadline } from '../../utils/readline'
 import { shouldBeAlphanumericOrChinese } from '../../utils/shouldBeAlphanumericOrChinese'
 import { shouldBeWithinRange } from '../../utils/shouldBeWithinRange'
+import type { Card } from '../Card/Card'
 import { Rank, rankSymbols } from '../Card/Rank'
 import { Suit, suitSymbols } from '../Card/Suit'
+import type { CardPattern } from '../CardPattern/CardPattern'
 import { Deck } from '../Deck/Deck'
 import { GameLogger } from '../GameLogger/GameLogger'
 import { AI } from '../Player/AI/AI'
 import { Human } from '../Player/Human/Human'
-import { ChooseResultType, type Player } from '../Player/Player'
+import type { ChooseCardsContext, Player } from '../Player/Player'
 import { Round } from '../Round/Round'
 import type { CompareCardPatternHandler } from '../RuleEngine/CompareCardPatternHandler/CompareCardPatternHandler'
 import type { FindPlayablePatternsHandler } from '../RuleEngine/FindPlayablePatternsHandler/FindPlayablePatternsHandler'
@@ -191,6 +193,7 @@ export class Big2 {
     const gameLogger = this.getGameLogger()
     const round = this.getRound()
 
+    // 如果牌堆為空或大小不為 52，則初始化牌堆
     if (deck.isEmpty() || deck.size() !== 52) {
       deck.initialize()
     }
@@ -228,10 +231,6 @@ export class Big2 {
         this.advanceToNextPlayer()
       }
 
-      if (this.hasWinner()) {
-        break
-      }
-
       round.resetTopPlay()
     }
 
@@ -243,10 +242,13 @@ export class Big2 {
    * 透過 CLI 設定玩家，補足至 4 位。
    */
   async setupPlayers() {
-    // 輸入每個玩家的名稱 (Name)
+    // 補足至 4 位玩家
     for (let i = this.players.length; i < 4; i++) {
+      // 詢問玩家類型
       const isHuman = await this.promptPlayerType(`P${i + 1}`)
+      // 詢問玩家名稱
       const name = await this.promptPlayerName(`P${i + 1}`)
+      // 建立玩家
       const player = isHuman ? new Human({ name }) : new AI({ name })
       this.addPlayer(player)
     }
@@ -326,42 +328,145 @@ export class Big2 {
     const player = this.getCurrentPlayer()
     const gameLogger = this.getGameLogger()
     const round = this.getRound()
+    const ruleEngine = this.getRuleEngine()
     const playerName = player.getName()
     const hand = player.getHand()
-    const topPlay = this.getRound().getTopPlay()
-    const topPlayerIndex = this.getRound().getTopPlayerIndex()
-    const ruleEngine = this.getRuleEngine()
+    const topPlay = round.getTopPlay()
+    const topPlayerIndex = round.getTopPlayerIndex()
+    const sortedHand = hand.getSortedCards()
 
-    const sortedCards = hand.getSortedCards()
+    gameLogger.logPlayerTurnStart(playerName, sortedHand)
 
-    gameLogger.logPlayerTurnStart(playerName, sortedCards)
-
-    const chooseResult = await player.chooseCards(
-      topPlay,
-      topPlayerIndex,
-      ruleEngine,
-      gameLogger,
-    )
-
-    if (chooseResult.type === ChooseResultType.Pass) {
-      gameLogger.logPlayerPass(playerName)
-      round.recordPass()
+    const context: ChooseCardsContext = {
+      sortedHand,
+      playablePatterns: this.getPlayablePatterns(
+        hand.getCards(),
+        topPlay,
+        topPlayerIndex,
+      ),
+      canPass: topPlay !== null,
     }
 
-    if (chooseResult.type === ChooseResultType.Play) {
-      const cardPattern = chooseResult.cardPattern
-      if (cardPattern == null) {
-        throw new Error('Card pattern is null')
+    let cardPattern: CardPattern
+    while (true) {
+      const cards = await player.chooseCards(context)
+
+      // 如果選擇了 PASS，則檢查是否可以 PASS
+      if (cards === null) {
+        if (!context.canPass) {
+          gameLogger.logInvalidPass()
+          gameLogger.logHand(sortedHand)
+          continue
+        }
+
+        // 記錄 PASS
+        gameLogger.logPlayerPass(playerName)
+        round.recordPass()
+        return
       }
 
-      gameLogger.logPlay(playerName, cardPattern)
+      // 檢查所選的牌是否皆來自手牌
+      if (!this.isValidCardSelection(cards, sortedHand)) {
+        gameLogger.logInvalidPlay()
+        gameLogger.logHand(sortedHand)
+        continue
+      }
 
-      hand.removeCards(cardPattern.getCards())
+      // 如果有 topPlay
+      if (topPlay) {
+        // 檢查是否可出牌
+        if (!ruleEngine.isPlayable(cards, topPlay)) {
+          gameLogger.logInvalidPlay()
+          gameLogger.logHand(sortedHand)
+          continue
+        }
+        cardPattern = ruleEngine.parseCardPattern(cards)
+      } else {
+        try {
+          cardPattern = ruleEngine.parseCardPattern(cards)
+        } catch {
+          gameLogger.logInvalidPlay()
+          gameLogger.logHand(sortedHand)
+          continue
+        }
+      }
 
-      round.setTopPlay(cardPattern)
-      round.setTopPlayerIndex(this.getCurrentPlayerIndex())
-      round.resetConsecutivePassCount()
+      // 整局第一手
+      if (topPlay === null && topPlayerIndex === -1) {
+        // 沒有梅花 3，則不合法
+        if (!this.includesClubThree(cards)) {
+          gameLogger.logInvalidPlay()
+          gameLogger.logHand(sortedHand)
+          continue
+        }
+      }
+
+      break
     }
+
+    gameLogger.logPlay(playerName, cardPattern)
+    hand.removeCards(cardPattern.getCards())
+    round.setTopPlay(cardPattern)
+    round.setTopPlayerIndex(this.getCurrentPlayerIndex())
+    round.resetConsecutivePassCount()
+  }
+
+  /**
+   * 從手牌中找出目前可出的牌型。
+   * @param handCards - 玩家的手牌。
+   * @param topPlay - 目前檯面上的頂牌，新回合時為 null。
+   * @param topPlayerIndex - 出頂牌的玩家索引，新回合時為 -1。
+   * @returns 可出的牌型陣列。
+   */
+  private getPlayablePatterns(
+    handCards: Card[],
+    topPlay: CardPattern | null,
+    topPlayerIndex: number,
+  ): CardPattern[] {
+    let patterns = this.ruleEngine.findPlayablePatterns(handCards, topPlay)
+
+    // 整局第一手，必須含梅花 3
+    if (topPlay === null && topPlayerIndex === -1) {
+      patterns = patterns.filter((pattern) =>
+        this.includesClubThree(pattern.getCards()),
+      )
+    }
+
+    return patterns
+  }
+
+  /**
+   * 檢查所選的牌是否皆來自手牌。
+   * @param cards - 玩家選擇的牌。
+   * @param sortedHand - 已排序的手牌。
+   * @returns 合法時回傳 true。
+   */
+  private isValidCardSelection(cards: Card[], sortedHand: Card[]): boolean {
+    if (cards.length === 0) {
+      return false
+    }
+
+    const remainingHand = [...sortedHand]
+    for (const card of cards) {
+      const index = remainingHand.indexOf(card)
+      if (index === -1) {
+        return false
+      }
+      remainingHand.splice(index, 1)
+    }
+
+    return true
+  }
+
+  /**
+   * 檢查所選的牌是否包含梅花 3。
+   * @param cards - 要檢查的牌。
+   * @returns 包含梅花 3 時回傳 true。
+   */
+  private includesClubThree(cards: Card[]): boolean {
+    return cards.some(
+      (card) => card.getSuit() === Suit.Club && card.getRank() === Rank.Three,
+    )
   }
 
   /**

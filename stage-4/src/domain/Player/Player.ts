@@ -1,18 +1,12 @@
 import { shouldBeAlphanumericOrChinese } from '../../utils/shouldBeAlphanumericOrChinese'
 import type { Card } from '../Card/Card'
 import type { CardPattern } from '../CardPattern/CardPattern'
-import type { GameLogger } from '../GameLogger/GameLogger'
-import type { RuleEngine } from '../RuleEngine/RuleEngine'
 import { Hand } from './Hand/Hand'
 
-export enum ChooseResultType {
-  Play = 'Play',
-  Pass = 'Pass',
-}
-
-export type ChooseResult = {
-  type: ChooseResultType
-  cardPattern?: CardPattern
+export type ChooseCardsContext = {
+  sortedHand: Card[]
+  playablePatterns: CardPattern[]
+  canPass: boolean
 }
 
 type PlayerProps = {
@@ -69,16 +63,8 @@ export abstract class Player {
 
   /**
    * 選擇要出的牌或 PASS。
-   * @param topPlay - 目前檯面上的頂牌，新回合時為 null。
-   * @param topPlayerIndex - 出頂牌的玩家索引，新回合時為 -1。
-   * @param ruleEngine - 規則引擎，用於驗證與解析牌型。
-   * @param gameLogger - 遊戲日誌，用於輸出提示訊息。
-   * @returns 玩家的選擇結果。
+   * @param context - 選牌所需的上下文，包含手牌、可出牌型與是否可 PASS。
+   * @returns 選擇的牌，null 表示 PASS。
    */
-  abstract chooseCards(
-    topPlay: CardPattern | null,
-    topPlayerIndex: number,
-    ruleEngine: RuleEngine,
-    gameLogger: GameLogger,
-  ): Promise<ChooseResult>
+  abstract chooseCards(context: ChooseCardsContext): Promise<Card[] | null>
 }
