@@ -107,7 +107,8 @@ export abstract class Unit {
   }
   setName(name: string) {
     // 包含多個字母或是數字的字串
-    if (!/^[a-zA-Z0-9]+$/.test(name)) {
+    // 可以中文、英文、數字
+    if (!/^[a-zA-Z0-9\u4e00-\u9fa5]+$/.test(name)) {
       throw new Error(
         'name must be a string containing only letters and numbers',
       )

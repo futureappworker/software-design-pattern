@@ -4,20 +4,6 @@ import { BasicAttackAction } from '../../AttackAction/BasicAttackAction/BasicAtt
 import { Unit } from '../Unit'
 
 export class Hero extends Unit {
-  setName(name: string) {
-    // 包含多個字母或是數字的字串
-    // 可以中文、英文、數字
-    if (!/^[a-zA-Z0-9\u4e00-\u9fa5]+$/.test(name)) {
-      throw new Error(
-        'name must be a string containing only letters and numbers',
-      )
-    }
-    if (name.length === 0) {
-      throw new Error('name must be a non-empty string')
-    }
-    this.name = name
-  }
-
   /**
    * 透過 CLI 詢問使用者要選擇哪一個行動
    * 輸入行動編號（0 起始）；無效輸入會重新詢問
