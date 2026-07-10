@@ -155,9 +155,9 @@ export abstract class Unit {
   }
 
   takeDamage(damage: number, attacker: Unit) {
-    // <角色> 受到 <攻擊者> 的 <傷害值> 點傷害。
+    // <攻擊者> 對 <角色> 造成 <傷害值> 點傷害。
     console.log(
-      `${this.getLogName()} 受到 ${attacker.getLogName()} 的 ${damage} 點傷害。`,
+      `${attacker.getLogName()} 對 ${this.getLogName()} 造成 ${damage} 點傷害。`,
     )
 
     const newHp = Math.max(this.hp - damage, 0)
