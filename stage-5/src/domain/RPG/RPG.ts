@@ -201,8 +201,17 @@ export class RPG {
 
       // loop aliveAllies
       for (const ally of aliveAllies) {
+        if (ally.isDead()) {
+          continue
+        }
         this.printStatus(ally)
         this.resolveStatus(ally)
+        if (ally.isDead()) {
+          if (this.isGameOver()) {
+            break Round
+          }
+          continue
+        }
         const attackAction = await this.chooseAction(ally)
         const targets = await this.chooseTargets(ally, attackAction)
         this.executeAction(ally, attackAction, targets)
@@ -214,8 +223,17 @@ export class RPG {
 
       // loop aliveEnemies
       for (const enemy of aliveEnemies) {
+        if (enemy.isDead()) {
+          continue
+        }
         this.printStatus(enemy)
         this.resolveStatus(enemy)
+        if (enemy.isDead()) {
+          if (this.isGameOver()) {
+            break Round
+          }
+          continue
+        }
         const attackAction = await this.chooseAction(enemy)
         const targets = await this.chooseTargets(enemy, attackAction)
         this.executeAction(enemy, attackAction, targets)

@@ -7,9 +7,9 @@ export class CurseSkill extends Skill {
   constructor() {
     super({
       name: '詛咒',
-      mpCost: 50,
+      mpCost: 100,
       target: AttackActionTargetType.Enemy,
-      targetCount: -1,
+      targetCount: 1,
     })
   }
 
@@ -26,7 +26,6 @@ export class CurseSkill extends Skill {
         const curseEffect = new CurseEffect({ caster, target })
         caster.applyCurseEffect(curseEffect)
         target.applyCurseEffect(curseEffect)
-        target.addDeathObserver(curseEffect)
       }
     }
   }
