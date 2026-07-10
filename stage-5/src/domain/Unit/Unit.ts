@@ -232,7 +232,7 @@ export abstract class Unit {
     return this.status.resolveStatus(this)
   }
   receiveOnePunch(attacker: Unit): void {
-    this.status.onReceiveOnePunch(this, attacker)
+    this.status.receiveOnePunch(this, attacker)
   }
 
   abstract chooseAction(): Promise<AttackAction>

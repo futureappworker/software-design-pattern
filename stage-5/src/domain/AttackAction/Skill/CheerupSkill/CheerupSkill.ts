@@ -13,11 +13,16 @@ export class CheerupSkill extends Skill {
     })
   }
 
-  execute(_self: Unit, targets: Unit[]): void {
-    // <角色> 對 <目標角色清單> 使用了 <技能>。
-    console.log(
-      `${_self.getLogName()} 對 ${targets.map((target) => target.getLogName()).join(', ')} 使用了 ${this.getName()}。`,
-    )
+  execute(self: Unit, targets: Unit[]): void {
+    if (targets.length === 0) {
+      // <角色> 使用了 <技能>。
+      console.log(`${self.getLogName()} 使用了 ${this.getName()}。`)
+    } else {
+      // <角色> 對 <目標角色清單> 使用了 <技能>。
+      console.log(
+        `${self.getLogName()} 對 ${targets.map((target) => target.getLogName()).join(', ')} 使用了 ${this.getName()}。`,
+      )
+    }
 
     for (const target of targets) {
       target.enterStatus(new CheerupUnitStatus())

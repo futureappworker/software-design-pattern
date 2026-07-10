@@ -57,7 +57,7 @@ export class RPG {
   }
 
   private resolveStatus(unit: Unit) {
-    unit.resolveStatus()
+    return unit.resolveStatus()
   }
 
   private async chooseAction(unit: Unit): Promise<AttackAction> {
@@ -205,16 +205,21 @@ export class RPG {
           continue
         }
         this.printStatus(ally)
-        this.resolveStatus(ally)
+        const canAct = this.resolveStatus(ally)
         if (ally.isDead()) {
           if (this.isGameOver()) {
             break Round
           }
           continue
         }
+        if (!canAct) {
+          ally.tickStatus()
+          continue
+        }
         const attackAction = await this.chooseAction(ally)
         const targets = await this.chooseTargets(ally, attackAction)
         this.executeAction(ally, attackAction, targets)
+        ally.tickStatus()
 
         if (this.isGameOver()) {
           break Round
@@ -227,16 +232,21 @@ export class RPG {
           continue
         }
         this.printStatus(enemy)
-        this.resolveStatus(enemy)
+        const canAct = this.resolveStatus(enemy)
         if (enemy.isDead()) {
           if (this.isGameOver()) {
             break Round
           }
           continue
         }
+        if (!canAct) {
+          enemy.tickStatus()
+          continue
+        }
         const attackAction = await this.chooseAction(enemy)
         const targets = await this.chooseTargets(enemy, attackAction)
         this.executeAction(enemy, attackAction, targets)
+        enemy.tickStatus()
 
         if (this.isGameOver()) {
           break Round
