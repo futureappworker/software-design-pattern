@@ -1,6 +1,6 @@
 import type { AttackAction } from '../AttackAction/AttackAction'
 import { AttackActionTargetType } from '../AttackAction/AttackActionTargetType/AttackActionTargetType'
-import { Troop } from '../Troop/Troop'
+import type { Troop } from '../Troop/Troop'
 import { Hero } from '../Unit/Hero/Hero'
 import type { Unit } from '../Unit/Unit'
 
@@ -13,10 +13,7 @@ export class RPG {
   private allies!: Troop
   private enemies!: Troop
 
-  constructor({
-    allies = new Troop({ units: [] }),
-    enemies = new Troop({ units: [] }),
-  }: RPGProps) {
+  constructor({ allies, enemies }: RPGProps) {
     this.setAllies(allies)
     this.setEnemies(enemies)
   }
@@ -55,7 +52,7 @@ export class RPG {
   private printStatus(unit: Unit) {
     // 輪到 <角色名稱> (HP: <HP>, MP: <MP>, STR: <STR>, State: <狀態>)。
     console.log(
-      `輪到 ${unit.getName()} (HP: ${unit.getHp()}, MP: ${unit.getMp()}, STR: ${unit.getStr()}, State: ${unit.getStatus().getType()})。`,
+      `輪到 ${unit.getLogName()} (HP: ${unit.getHp()}, MP: ${unit.getMp()}, STR: ${unit.getStr()}, State: ${unit.getStatus().getType()})。`,
     )
   }
 
@@ -160,6 +157,7 @@ export class RPG {
     attackAction: AttackAction,
     targets: Unit[],
   ) {
+    unit.spendMp(attackAction.getMpCost())
     attackAction.execute(unit, targets)
   }
 
@@ -168,6 +166,7 @@ export class RPG {
       const aliveAllies = this.getAliveAllies()
       const aliveEnemies = this.getAliveEnemies()
 
+      console.log('#軍隊-1-開始')
       // loop aliveAllies
       for (const ally of aliveAllies) {
         this.printStatus(ally)
@@ -180,7 +179,9 @@ export class RPG {
           break Round
         }
       }
+      console.log('#軍隊-1-結束')
 
+      console.log('#軍隊-2-開始')
       // loop aliveEnemies
       for (const enemy of aliveEnemies) {
         this.printStatus(enemy)
@@ -193,6 +194,7 @@ export class RPG {
           break Round
         }
       }
+      console.log('#軍隊-2-結束')
     }
 
     this.showBattleResult()

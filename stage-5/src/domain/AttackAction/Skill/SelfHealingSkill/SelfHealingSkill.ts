@@ -13,7 +13,10 @@ export class SelfHealingSkill extends Skill {
     })
   }
 
-  execute(_self: Unit, targets: Unit[]): void {
+  execute(self: Unit, targets: Unit[]): void {
+    // <角色> 使用了 <技能>。
+    console.log(`${self.getLogName()} 使用了 ${this.getName()}。`)
+
     for (const target of targets) {
       target.enterStatus(new PetrochemicalUnitStatus())
     }

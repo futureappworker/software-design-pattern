@@ -23,7 +23,7 @@ export abstract class Unit {
   private str: number = 0
   private status: UnitStatus = new NormalUnitStatus()
   private statusTurnsLeft: number = 0
-  private name!: string
+  protected name!: string
   private skills: Skill[] = []
   private curseEffects: CurseEffect[] = []
   private deathObservers: DeathObserver[] = []
@@ -101,6 +101,9 @@ export abstract class Unit {
 
   getName() {
     return this.name
+  }
+  getLogName() {
+    return `[${this.getTroop().getName()}]${this.getName()}`
   }
   setName(name: string) {
     // 包含多個字母或是數字的字串

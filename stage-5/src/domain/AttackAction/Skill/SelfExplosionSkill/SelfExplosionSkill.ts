@@ -20,6 +20,12 @@ export class SelfExplosionSkill extends Skill {
     if (self.getStatus().getType() === UnitStatusType.Cheerup) {
       damage += 50
     }
+
+    // <角色> 對 <目標角色清單> 使用了 <技能>。
+    console.log(
+      `${self.getLogName()} 對 ${targets.map((target) => target.getLogName()).join(', ')} 使用了 ${this.getName()}。`,
+    )
+
     for (const target of targets) {
       target.takeDamage(damage)
     }

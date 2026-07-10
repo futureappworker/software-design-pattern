@@ -26,6 +26,10 @@ export class SummonSkill extends Skill {
       troop,
       summoner,
     })
+
+    // <角色> 使用了 <技能>。
+    console.log(`${self.getLogName()} 使用了 ${this.getName()}。`)
+
     troop.addUnit(slime)
     slime.addDeathObserver(new SlimeDeathObserver())
   }
