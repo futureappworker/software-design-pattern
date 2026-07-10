@@ -14,7 +14,7 @@ export class SelfExplosionSkill extends Skill {
   }
 
   execute(self: Unit, targets: Unit[]): void {
-    self.takeDamage(self.getHp())
+    self.takeDamage(self.getHp(), self)
     self.die()
     let damage = 150
     if (self.getStatus().getType() === UnitStatusType.Cheerup) {
@@ -27,7 +27,7 @@ export class SelfExplosionSkill extends Skill {
     )
 
     for (const target of targets) {
-      target.takeDamage(damage)
+      target.takeDamage(damage, self)
     }
   }
 }

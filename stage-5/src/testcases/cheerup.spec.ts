@@ -1,8 +1,4 @@
 // 範例輸入: cheerup.in
-// 範例輸出: cheerup.out
-
-import { describe } from 'vitest'
-
 // 輸入格式:
 // #軍隊-1-開始
 // <軍隊-1>
@@ -14,5 +10,9 @@ import { describe } from 'vitest'
 // <英雄決策-2>
 // <英雄決策-3>
 // ...
+
+// 範例輸出: cheerup.out
+
+import { describe } from 'vitest'
 
 describe('cheerup testcase', () => {})

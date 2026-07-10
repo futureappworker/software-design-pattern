@@ -7,11 +7,11 @@ export class PoisonedUnitStatus extends UnitStatus {
     super({ type: UnitStatusType.Poisoned })
   }
 
-  onReceiveOnePunch(self: Unit): void {
+  onReceiveOnePunch(self: Unit, attacker: Unit): void {
     // 造成三次 80 點傷害。
     //（每一次傷害後會判定目標是否死亡，若已死亡則不再造成剩餘次數的傷害。）
     for (let i = 0; i < 3; i++) {
-      self.takeDamage(80)
+      self.takeDamage(80, attacker)
       if (self.isDead()) {
         break
       }
@@ -23,7 +23,7 @@ export class PoisonedUnitStatus extends UnitStatus {
   }
 
   resolveStatus(self: Unit): boolean {
-    self.takeDamage(30)
+    self.loseHp(30)
     if (self.isDead()) {
       return false
     }

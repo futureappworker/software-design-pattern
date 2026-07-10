@@ -25,7 +25,7 @@ export class FireballSkill extends Skill {
     )
 
     for (const target of targets) {
-      target.takeDamage(damage)
+      target.takeDamage(damage, self)
     }
   }
 }

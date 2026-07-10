@@ -21,7 +21,8 @@ export class BasicAttackAction extends AttackAction {
     for (const target of targets) {
       // <角色> 攻擊 <目標>。
       console.log(`${self.getLogName()} 攻擊 ${target.getLogName()}。`)
-      target.takeDamage(damage)
+
+      target.takeDamage(damage, self)
     }
   }
 }

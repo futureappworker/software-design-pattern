@@ -25,6 +25,10 @@ export class WaterballSkill extends Skill {
     )
 
     for (const target of targets) {
+      // <角色> 對 <目標> 造成 <傷害值> 點傷害。
+      console.log(
+        `${self.getLogName()} 對 ${target.getLogName()} 造成 ${damage} 點傷害。`,
+      )
       target.takeDamage(damage)
     }
   }

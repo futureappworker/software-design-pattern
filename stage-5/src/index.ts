@@ -18,11 +18,66 @@ const hero = new Hero({
   troop: allies,
 })
 
-const ai1 = new AI({
+const servant1 = new AI({
   hp: 1000,
   mp: 0,
   str: 0,
   name: 'Servant1',
+  skills: [],
+  troop: allies,
+  actionSelectionStrategy: new SeedAIActionSelectionStrategy(),
+  targetSelectionStrategy: new SeedAITargetSelectionStrategy(),
+})
+
+const servant2 = new AI({
+  hp: 1000,
+  mp: 0,
+  str: 0,
+  name: 'Servant2',
+  skills: [],
+  troop: allies,
+  actionSelectionStrategy: new SeedAIActionSelectionStrategy(),
+  targetSelectionStrategy: new SeedAITargetSelectionStrategy(),
+})
+
+const servant3 = new AI({
+  hp: 1000,
+  mp: 0,
+  str: 0,
+  name: 'Servant3',
+  skills: [],
+  troop: allies,
+  actionSelectionStrategy: new SeedAIActionSelectionStrategy(),
+  targetSelectionStrategy: new SeedAITargetSelectionStrategy(),
+})
+
+const servant4 = new AI({
+  hp: 1000,
+  mp: 0,
+  str: 0,
+  name: 'Servant4',
+  skills: [],
+  troop: allies,
+  actionSelectionStrategy: new SeedAIActionSelectionStrategy(),
+  targetSelectionStrategy: new SeedAITargetSelectionStrategy(),
+})
+
+const servant5 = new AI({
+  hp: 1000,
+  mp: 0,
+  str: 0,
+  name: 'Servant5',
+  skills: [],
+  troop: allies,
+  actionSelectionStrategy: new SeedAIActionSelectionStrategy(),
+  targetSelectionStrategy: new SeedAITargetSelectionStrategy(),
+})
+
+const slime1 = new AI({
+  hp: 500,
+  mp: 0,
+  str: 0,
+  name: 'Slime1',
   skills: [],
   troop: enemies,
   actionSelectionStrategy: new SeedAIActionSelectionStrategy(),
@@ -30,7 +85,12 @@ const ai1 = new AI({
 })
 
 allies.addUnit(hero)
-enemies.addUnit(ai1)
+allies.addUnit(servant1)
+allies.addUnit(servant2)
+allies.addUnit(servant3)
+allies.addUnit(servant4)
+allies.addUnit(servant5)
+enemies.addUnit(slime1)
 
 const rpg = new RPG({
   allies,

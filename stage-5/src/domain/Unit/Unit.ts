@@ -154,8 +154,21 @@ export abstract class Unit {
     return this.hp > 0
   }
 
-  takeDamage(damage: number) {
+  takeDamage(damage: number, attacker: Unit) {
+    // <角色> 受到 <攻擊者> 的 <傷害值> 點傷害。
+    console.log(
+      `${this.getLogName()} 受到 ${attacker.getLogName()} 的 ${damage} 點傷害。`,
+    )
+
     const newHp = Math.max(this.hp - damage, 0)
+    this.setHp(newHp)
+    if (this.getHp() <= 0) {
+      this.die()
+    }
+  }
+
+  loseHp(amount: number) {
+    const newHp = Math.max(this.hp - amount, 0)
     this.setHp(newHp)
     if (this.getHp() <= 0) {
       this.die()
@@ -187,6 +200,9 @@ export abstract class Unit {
   }
 
   die() {
+    // <目標> 死亡。
+    console.log(`${this.getLogName()} 死亡。`)
+
     this.notifyDeath()
   }
 
@@ -215,8 +231,8 @@ export abstract class Unit {
   resolveStatus(): boolean {
     return this.status.resolveStatus(this)
   }
-  receiveOnePunch(): void {
-    this.status.onReceiveOnePunch(this)
+  receiveOnePunch(attacker: Unit): void {
+    this.status.onReceiveOnePunch(this, attacker)
   }
 
   abstract chooseAction(): Promise<AttackAction>

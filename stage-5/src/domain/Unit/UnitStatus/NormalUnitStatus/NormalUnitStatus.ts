@@ -7,9 +7,9 @@ export class NormalUnitStatus extends UnitStatus {
     super({ type: UnitStatusType.Normal })
   }
 
-  onReceiveOnePunch(self: Unit): void {
+  onReceiveOnePunch(self: Unit, attacker: Unit): void {
     // 造成 100 點傷害
-    self.takeDamage(100)
+    self.takeDamage(100, attacker)
   }
 
   enterState(self: Unit): void {

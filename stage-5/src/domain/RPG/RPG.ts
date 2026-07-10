@@ -73,6 +73,7 @@ export class RPG {
     unit: Unit,
     attackAction: AttackAction,
   ): Promise<Unit[]> {
+    let hero: Hero | undefined
     let candidates: Unit[] = []
     const targetCount = attackAction.getTargetCount()
 
@@ -84,10 +85,42 @@ export class RPG {
         break
       }
       case AttackActionTargetType.Ally:
-        candidates = this.getAliveAllies()
+        // unit 所在的軍隊中，有 hero 嗎
+        hero = unit
+          .getTroop()
+          .getUnits()
+          .find((u) => u instanceof Hero)
+        if (hero) {
+          // 友軍，就是 allies 中, 除了 unit 以外的所有存活的單位
+          candidates = this.getAllies()
+            .getAliveUnits()
+            .filter((u) => u !== unit)
+        }
+        if (!hero) {
+          // 友軍，就是 enemies 中, 除了 unit 以外的所有存活的單位
+          candidates = this.getEnemies()
+            .getAliveUnits()
+            .filter((u) => u !== unit)
+        }
         break
       case AttackActionTargetType.Enemy:
-        candidates = this.getAliveEnemies()
+        // unit 所在的軍隊中，有 hero 嗎
+        hero = unit
+          .getTroop()
+          .getUnits()
+          .find((u) => u instanceof Hero)
+        if (hero) {
+          // 敵軍，就是 enemies 中, 除了 unit 以外的所有存活的單位
+          candidates = this.getEnemies()
+            .getAliveUnits()
+            .filter((u) => u !== unit)
+        }
+        if (!hero) {
+          // 敵軍，就是 allies 中, 除了 unit 以外的所有存活的單位
+          candidates = this.getAllies()
+            .getAliveUnits()
+            .filter((u) => u !== unit)
+        }
         break
       case AttackActionTargetType.Self:
         candidates = [unit]
@@ -166,7 +199,6 @@ export class RPG {
       const aliveAllies = this.getAliveAllies()
       const aliveEnemies = this.getAliveEnemies()
 
-      console.log('#軍隊-1-開始')
       // loop aliveAllies
       for (const ally of aliveAllies) {
         this.printStatus(ally)
@@ -179,9 +211,7 @@ export class RPG {
           break Round
         }
       }
-      console.log('#軍隊-1-結束')
 
-      console.log('#軍隊-2-開始')
       // loop aliveEnemies
       for (const enemy of aliveEnemies) {
         this.printStatus(enemy)
@@ -194,7 +224,6 @@ export class RPG {
           break Round
         }
       }
-      console.log('#軍隊-2-結束')
     }
 
     this.showBattleResult()

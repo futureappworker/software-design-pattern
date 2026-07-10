@@ -16,16 +16,16 @@ export abstract class UnitStatus {
     return this.type
   }
 
-  receiveOnePunch(unit: Unit) {
+  receiveOnePunch(unit: Unit, attacker: Unit) {
     if (unit.getHp() >= 500) {
-      unit.takeDamage(300)
+      unit.takeDamage(300, attacker)
       return
     }
 
-    this.onReceiveOnePunch(unit)
+    this.onReceiveOnePunch(unit, attacker)
   }
 
-  abstract onReceiveOnePunch(self: Unit): void
+  abstract onReceiveOnePunch(self: Unit, attacker: Unit): void
 
   abstract resolveStatus(self: Unit): boolean
 

@@ -19,7 +19,7 @@ export class OnePunchSkill extends Skill {
     )
 
     for (const target of targets) {
-      target.receiveOnePunch()
+      target.receiveOnePunch(self)
     }
   }
 }

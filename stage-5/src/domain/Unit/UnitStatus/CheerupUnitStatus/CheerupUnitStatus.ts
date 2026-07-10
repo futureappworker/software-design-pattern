@@ -10,7 +10,7 @@ export class CheerupUnitStatus extends UnitStatus {
 
   onReceiveOnePunch(self: Unit): void {
     // 造成 100 點傷害，並將目標角色的狀態恢復成正常狀態
-    self.takeDamage(100)
+    self.takeDamage(100, self)
     self.enterStatus(new NormalUnitStatus())
   }
 
