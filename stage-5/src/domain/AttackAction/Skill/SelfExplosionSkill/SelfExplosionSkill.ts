@@ -14,8 +14,7 @@ export class SelfExplosionSkill extends Skill {
   }
 
   execute(self: Unit, targets: Unit[]): void {
-    self.takeDamage(self.getHp(), self)
-    self.die()
+    const otherTargets = targets.filter((target) => target !== self)
     let damage = 150
     if (self.getStatus().getType() === UnitStatusType.Cheerup) {
       damage += 50
@@ -23,11 +22,13 @@ export class SelfExplosionSkill extends Skill {
 
     // <角色> 對 <目標角色清單> 使用了 <技能>。
     console.log(
-      `${self.getLogName()} 對 ${targets.map((target) => target.getLogName()).join(', ')} 使用了 ${this.getName()}。`,
+      `${self.getLogName()} 對 ${otherTargets.map((target) => target.getLogName()).join(', ')} 使用了 ${this.getName()}。`,
     )
 
-    for (const target of targets) {
+    for (const target of otherTargets) {
       target.takeDamage(damage, self)
     }
+
+    self.loseHp(self.getHp())
   }
 }
