@@ -1,5 +1,4 @@
 import type { Unit } from '../../../Unit/Unit'
-import { PetrochemicalUnitStatus } from '../../../Unit/UnitStatus/PetrochemicalUnitStatus/PetrochemicalUnitStatus'
 import { AttackActionTargetType } from '../../AttackActionTargetType/AttackActionTargetType'
 import { Skill } from '../Skill'
 
@@ -18,7 +17,7 @@ export class SelfHealingSkill extends Skill {
     console.log(`${self.getLogName()} 使用了 ${this.getName()}。`)
 
     for (const target of targets) {
-      target.enterStatus(new PetrochemicalUnitStatus())
+      target.heal(150)
     }
   }
 }
