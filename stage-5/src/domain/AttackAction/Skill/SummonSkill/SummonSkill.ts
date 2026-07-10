@@ -1,4 +1,3 @@
-import { SlimeDeathObserver } from '../../../Unit/DeathObserver/SlimeDeathObserver/SlimeDeathObserver'
 import { Slime } from '../../../Unit/Slime/Slime'
 import type { Unit } from '../../../Unit/Unit'
 import { AttackActionTargetType } from '../../AttackActionTargetType/AttackActionTargetType'
@@ -31,6 +30,5 @@ export class SummonSkill extends Skill {
     console.log(`${self.getLogName()} 使用了 ${this.getName()}。`)
 
     troop.addUnit(slime)
-    slime.addDeathObserver(new SlimeDeathObserver())
   }
 }

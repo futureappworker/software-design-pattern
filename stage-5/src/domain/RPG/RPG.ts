@@ -196,11 +196,9 @@ export class RPG {
 
   async battle() {
     Round: while (!this.isGameOver()) {
-      const aliveAllies = this.getAliveAllies()
-      const aliveEnemies = this.getAliveEnemies()
-
-      // loop aliveAllies
-      for (const ally of aliveAllies) {
+      // 以軍隊單位清單索引遍歷，召喚出的新單位會加在尾端並於同回合行動
+      for (let i = 0; i < this.getAllies().getUnits().length; i++) {
+        const ally = this.getAllies().getUnits()[i]
         if (ally.isDead()) {
           continue
         }
@@ -226,8 +224,8 @@ export class RPG {
         }
       }
 
-      // loop aliveEnemies
-      for (const enemy of aliveEnemies) {
+      for (let i = 0; i < this.getEnemies().getUnits().length; i++) {
+        const enemy = this.getEnemies().getUnits()[i]
         if (enemy.isDead()) {
           continue
         }

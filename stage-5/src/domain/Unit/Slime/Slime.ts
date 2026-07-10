@@ -31,7 +31,7 @@ export class Slime extends AI {
       troop,
     })
     this.summoner = summoner
-    this.summoner.addDeathObserver(new SlimeDeathObserver())
+    this.addDeathObserver(new SlimeDeathObserver())
   }
 
   getSummoner() {
