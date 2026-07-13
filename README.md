@@ -392,7 +392,7 @@ Problem:
 並允許該類別物件，能隨著狀態的改變，而抽換自身行為?
 ```
 
-### 門面模式 ( Fasade Pattern )
+### 門面模式 ( Facade Pattern )
 
 ```
 Force-易用性:
