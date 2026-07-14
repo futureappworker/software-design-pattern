@@ -1,5 +1,7 @@
 import type { Patient } from './Patient'
+import type { Prescription } from './Prescription'
 import type { Symptom } from './Symptom'
+import { DiagnosisNotFoundError } from './errors/DiagnosisNotFoundError'
 
 type DiagnosisRequestProps = {
   patient: Patient
@@ -30,11 +32,28 @@ export class DiagnosisRequest {
     return [...this.symptoms]
   }
 
-  complete() {
+  complete(prescription: Prescription) {
+    console.log('\n')
+    console.log(
+      `診斷成功：\n${this.patient.getId()} ${this.patient.getName()} \n處方名字: ${prescription.getName()}`,
+    )
+    console.log('\n')
     this.resolveCompletion?.()
   }
 
+  // 規則全不符合：業務上已結束，不 reject 給 client
   fail(error: unknown) {
+    console.log('\n')
+    console.log(
+      `診斷不出疾病：\n${this.patient.getId()} ${this.patient.getName()}`,
+    )
+    console.log('\n')
+
+    if (error instanceof DiagnosisNotFoundError) {
+      this.resolveCompletion?.()
+      return
+    }
+
     this.rejectCompletion?.(error)
   }
 }

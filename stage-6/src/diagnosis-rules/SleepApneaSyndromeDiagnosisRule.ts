@@ -16,9 +16,9 @@ export class SleepApneaSyndromeDiagnosisRule extends DiagnosisRule {
     const patient = diagnosisRequest.getPatient()
     const symptoms = diagnosisRequest.getSymptoms()
 
-    // BMI = 體重 ÷ (身高 × 身高)
-    const bmi =
-      patient.getWeight() / (patient.getHeight() * patient.getHeight())
+    // BMI = 體重(kg) ÷ (身高(m) × 身高(m))；身高以公分儲存
+    const heightInMeters = patient.getHeight() / 100
+    const bmi = patient.getWeight() / (heightInMeters * heightInMeters)
 
     if (bmi > 26 && symptoms.includes(Symptom.Snore)) {
       return new Prescription({

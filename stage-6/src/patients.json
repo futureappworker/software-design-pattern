@@ -1,0 +1,56 @@
+[
+  {
+    "id": "A123456789",
+    "name": "王小明",
+    "gender": "Male",
+    "age": 35,
+    "height": 175,
+    "weight": 70,
+    "cases": []
+  },
+  {
+    "id": "B234567890",
+    "name": "陳美玲",
+    "gender": "Female",
+    "age": 18,
+    "height": 162,
+    "weight": 50,
+    "cases": []
+  },
+  {
+    "id": "C345678901",
+    "name": "林大雄",
+    "gender": "Male",
+    "age": 42,
+    "height": 170,
+    "weight": 95,
+    "cases": []
+  },
+  {
+    "id": "D456789012",
+    "name": "黃雅婷",
+    "gender": "Female",
+    "age": 28,
+    "height": 158,
+    "weight": 52,
+    "cases": []
+  },
+  {
+    "id": "E567890123",
+    "name": "張志豪",
+    "gender": "Male",
+    "age": 55,
+    "height": 168,
+    "weight": 88,
+    "cases": []
+  },
+  {
+    "id": "D763987648",
+    "name": "李大偉",
+    "gender": "Male",
+    "age": 35,
+    "height": 175,
+    "weight": 70,
+    "cases": []
+  }
+]

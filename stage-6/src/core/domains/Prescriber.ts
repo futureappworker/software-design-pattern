@@ -80,10 +80,16 @@ export class Prescriber {
           await this.simulateDiagnosisTime()
           const prescription = this.diagnose(diagnosisRequest)
           this.notifyPrescriptionObservers(diagnosisRequest, prescription)
-          diagnosisRequest.complete()
+          diagnosisRequest.complete(prescription)
         } catch (error) {
           // 單筆失敗不阻塞佇列；錯誤回傳給該筆 requestDiagnosis 的呼叫端
           diagnosisRequest.fail(error)
+        }
+        if (this.queues.length !== 0) {
+          // log 剩餘 待診斷人名
+          console.log(
+            `待診斷人名：${this.queues.map((queue) => queue.getPatient().getName()).join(', ')}`,
+          )
         }
       }
     } finally {

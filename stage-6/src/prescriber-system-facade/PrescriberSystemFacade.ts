@@ -18,16 +18,16 @@ import {
 import type { DiagnosisOutputOption } from './DiagnosisOutputOption'
 
 type PrescriberSystemFacadeProps = {
-  patientsFileName: string
-  diseaseCatalogFileName: string
+  patientsFilePath: string
+  diseaseCatalogFilePath: string
 }
 
 export class PrescriberSystemFacade {
   private prescriberSystem: PrescriberSystem
 
   constructor({
-    patientsFileName,
-    diseaseCatalogFileName,
+    patientsFilePath,
+    diseaseCatalogFilePath,
   }: PrescriberSystemFacadeProps) {
     const patientDatabase = new PatientDatabase({})
     const diseaseCatalog = new DiseaseCatalog({})
@@ -41,9 +41,9 @@ export class PrescriberSystemFacade {
       prescriber,
     })
 
-    this.prescriberSystem.initializePatientsFromJson(patientsFileName)
+    this.prescriberSystem.initializePatientsFromJson(patientsFilePath)
     this.prescriberSystem.initializeDiseaseCatalogFromText(
-      diseaseCatalogFileName,
+      diseaseCatalogFilePath,
     )
 
     // 建立診斷規則鏈
@@ -94,13 +94,12 @@ export class PrescriberSystemFacade {
 
     try {
       await this.prescriberSystem.requestDiagnosis(patientId, symptoms)
-    } catch (error) {
-      // 診斷失敗時不會走到 shouldUnregister，需主動清掉 exporter
+    } finally {
+      // 診斷不出／例外都不會走 shouldUnregister，在此保險卸載
+      // 成功時 notify 可能已卸載，unregister 為 no-op
       if (exporter) {
         prescriber.unregisterPrescriptionObserver(exporter)
       }
-      throw error
     }
-    // 成功時由 PrescriptionExporter.shouldUnregister 在 notify 後自行卸載
   }
 }

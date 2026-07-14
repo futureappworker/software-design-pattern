@@ -27,7 +27,7 @@ export class AttractiveDiagnosisRule extends DiagnosisRule {
         potentialDisease: '有人想你了 (專業學名：Attractive)',
         medicines: [
           new Medicine({ name: '假鬢角' }),
-          new Medicine({ name: '臭味' }),
+          new Medicine({ name: '臭味劑' }),
         ],
         usage:
           '把假鬢角黏在臉的兩側，讓自己異性緣差一點，自然就不會有人想妳了。',
