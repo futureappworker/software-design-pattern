@@ -50,19 +50,23 @@ export class Prescriber {
 
   async requestDiagnosis(patient: Patient, symptoms: Symptom[]) {
     // 接收一筆診斷需求，建立診斷請求，
-    // 並將它加入等待診斷的 Queue
+    // 並將它加入等待診斷的 Queue。
+    // 回傳的 Promise 在「該筆」請求完成（成功或失敗）後才 settle。
 
     const diagnosisRequest = new DiagnosisRequest({ patient, symptoms })
 
     this.queues.push(diagnosisRequest)
-    if (this.isProcessing === false) {
-      await this.processQueue()
-    }
+    void this.processQueue()
+    return diagnosisRequest.completion
   }
 
   private async processQueue() {
     // 持續從 Queue 取出等待中的 DiagnosisRequest，
     // 並依序交給 diagnose() 執行，直到 Queue 為空為止。
+
+    if (this.isProcessing) {
+      return
+    }
 
     this.isProcessing = true
     try {
@@ -71,12 +75,22 @@ export class Prescriber {
         if (!diagnosisRequest) {
           break
         }
-        await this.simulateDiagnosisTime()
-        const prescription = this.diagnose(diagnosisRequest)
-        this.notifyPrescriptionObservers(diagnosisRequest, prescription)
+
+        try {
+          await this.simulateDiagnosisTime()
+          const prescription = this.diagnose(diagnosisRequest)
+          this.notifyPrescriptionObservers(diagnosisRequest, prescription)
+          diagnosisRequest.complete()
+        } catch (error) {
+          // 單筆失敗不阻塞佇列；錯誤回傳給該筆 requestDiagnosis 的呼叫端
+          diagnosisRequest.fail(error)
+        }
       }
     } finally {
       this.isProcessing = false
+      if (this.queues.length > 0) {
+        void this.processQueue()
+      }
     }
   }
 
@@ -113,14 +127,11 @@ export class Prescriber {
   }
 
   unregisterPrescriptionObserver(prescriptionObserver: PrescriptionObserver) {
-    const findIndex = this.prescriptionObservers.indexOf(prescriptionObserver)
-    if (findIndex === -1) {
+    const index = this.prescriptionObservers.indexOf(prescriptionObserver)
+    if (index === -1) {
       return
     }
-    this.prescriptionObservers.splice(
-      this.prescriptionObservers.indexOf(prescriptionObserver),
-      1,
-    )
+    this.prescriptionObservers.splice(index, 1)
   }
 
   setDiagnosisRule(diagnosisRule: DiagnosisRule) {
