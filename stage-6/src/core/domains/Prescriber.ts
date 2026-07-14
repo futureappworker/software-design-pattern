@@ -1,0 +1,151 @@
+import { DiagnosisRequest } from './DiagnosisRequest'
+import type { DiagnosisRule } from './DiagnosisRule'
+import { DiagnosisNotFoundError } from './errors/DiagnosisNotFoundError'
+import type { Patient } from './Patient'
+import type { Prescription } from './Prescription'
+import type { PrescriptionObserver } from './PrescriptionObserver'
+import type { Symptom } from './Symptom'
+
+type PrescriberProps = {
+  queues?: DiagnosisRequest[]
+  isProcessing?: boolean
+  prescriptionObservers?: PrescriptionObserver[]
+  diagnosisRule?: DiagnosisRule | null
+}
+
+// 診斷器
+export class Prescriber {
+  private queues: DiagnosisRequest[]
+  private isProcessing: boolean = false
+  private prescriptionObservers: PrescriptionObserver[] = []
+  private diagnosisRule: DiagnosisRule | null = null
+
+  constructor({
+    queues = [],
+    isProcessing = false,
+    prescriptionObservers = [],
+    diagnosisRule = null,
+  }: PrescriberProps) {
+    this.queues = [...queues]
+    this.isProcessing = isProcessing
+    this.prescriptionObservers = [...prescriptionObservers]
+    this.diagnosisRule = diagnosisRule
+  }
+
+  getQueues() {
+    return [...this.queues]
+  }
+
+  getIsProcessing() {
+    return this.isProcessing
+  }
+
+  getPrescriptionObservers() {
+    return [...this.prescriptionObservers]
+  }
+
+  getDiagnosisRule() {
+    return this.diagnosisRule
+  }
+
+  async requestDiagnosis(patient: Patient, symptoms: Symptom[]) {
+    // 接收一筆診斷需求，建立診斷請求，
+    // 並將它加入等待診斷的 Queue
+
+    const diagnosisRequest = new DiagnosisRequest({ patient, symptoms })
+
+    this.queues.push(diagnosisRequest)
+    if (this.isProcessing === false) {
+      await this.processQueue()
+    }
+  }
+
+  private async processQueue() {
+    // 持續從 Queue 取出等待中的 DiagnosisRequest，
+    // 並依序交給 diagnose() 執行，直到 Queue 為空為止。
+
+    this.isProcessing = true
+    try {
+      while (this.queues.length > 0) {
+        const diagnosisRequest = this.dequeueDiagnosisRequest()
+        if (!diagnosisRequest) {
+          break
+        }
+        await this.simulateDiagnosisTime()
+        const prescription = this.diagnose(diagnosisRequest)
+        this.notifyPrescriptionObservers(diagnosisRequest, prescription)
+      }
+    } finally {
+      this.isProcessing = false
+    }
+  }
+
+  private async simulateDiagnosisTime() {
+    // 模擬診斷時間
+    // 生成一個 3 秒的延遲
+    await new Promise((resolve) => setTimeout(resolve, 3000))
+  }
+
+  private diagnose(diagnosisRequest: DiagnosisRequest): Prescription {
+    if (!this.diagnosisRule) {
+      throw new DiagnosisNotFoundError()
+    }
+    return this.diagnosisRule.diagnose(diagnosisRequest)
+  }
+
+  private notifyPrescriptionObservers(
+    diagnosisRequest: DiagnosisRequest,
+    prescription: Prescription,
+  ) {
+    const patient = diagnosisRequest.getPatient()
+    const symptoms = diagnosisRequest.getSymptoms()
+
+    for (const prescriptionObserver of [...this.prescriptionObservers]) {
+      prescriptionObserver.onDiagnosisCompleted(patient, symptoms, prescription)
+      if (prescriptionObserver.shouldUnregister(patient)) {
+        this.unregisterPrescriptionObserver(prescriptionObserver)
+      }
+    }
+  }
+
+  registerPrescriptionObserver(prescriptionObserver: PrescriptionObserver) {
+    this.prescriptionObservers.push(prescriptionObserver)
+  }
+
+  unregisterPrescriptionObserver(prescriptionObserver: PrescriptionObserver) {
+    const findIndex = this.prescriptionObservers.indexOf(prescriptionObserver)
+    if (findIndex === -1) {
+      return
+    }
+    this.prescriptionObservers.splice(
+      this.prescriptionObservers.indexOf(prescriptionObserver),
+      1,
+    )
+  }
+
+  setDiagnosisRule(diagnosisRule: DiagnosisRule) {
+    this.diagnosisRule = diagnosisRule
+  }
+
+  addDiagnosisRule(diagnosisRule: DiagnosisRule) {
+    if (!this.diagnosisRule) {
+      this.setDiagnosisRule(diagnosisRule)
+      return
+    }
+
+    let current = this.diagnosisRule
+    let next = current.getNext()
+    while (next) {
+      current = next
+      next = current.getNext()
+    }
+    current.setNext(diagnosisRule)
+  }
+
+  private dequeueDiagnosisRequest(): DiagnosisRequest | null {
+    if (this.queues.length > 0) {
+      return this.queues.shift() || null
+    }
+    return null
+  }
+}

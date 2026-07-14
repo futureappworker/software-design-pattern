@@ -23,6 +23,8 @@
 
 - `stage-5` - 副本五：真・RPG 之對戰遊戲
 
+- `stage-6` - 副本六：處方診斷系統 - 門面模式
+
 ## 執行
 
 OOP 技法一：依賴
@@ -93,6 +95,11 @@ pnpm exec tsx stage-4/src/index.ts
 副本五：真・RPG 之對戰遊戲
 ```bash
 pnpm exec tsx stage-5/src/index.ts
+```
+
+副本六：處方診斷系統 - 門面模式
+```bash
+pnpm exec tsx stage-6/src/index.ts
 ```
 
 ## Node.js 環境執行 TypeScript
