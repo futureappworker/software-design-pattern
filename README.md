@@ -25,6 +25,8 @@
 
 - `stage-6` - 副本六：處方診斷系統 - 門面模式
 
+- `stage-7` - 副本七：服務探索/負載平衡 (Service Discovery/ Load Balancing) 機制
+
 ## 執行
 
 OOP 技法一：依賴
@@ -100,6 +102,11 @@ pnpm exec tsx stage-5/src/index.ts
 副本六：處方診斷系統 - 門面模式
 ```bash
 pnpm exec tsx stage-6/src/index.ts
+```
+
+副本七：服務探索/負載平衡 (Service Discovery/ Load Balancing) 機制
+```bash
+pnpm exec tsx stage-7/src/index.ts
 ```
 
 ## Node.js 環境執行 TypeScript
