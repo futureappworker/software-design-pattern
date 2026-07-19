@@ -1,7 +1,7 @@
+import { DiagnosisNotFoundError } from './errors/DiagnosisNotFoundError'
 import type { Patient } from './Patient'
 import type { Prescription } from './Prescription'
 import type { Symptom } from './Symptom'
-import { DiagnosisNotFoundError } from './errors/DiagnosisNotFoundError'
 
 type DiagnosisRequestProps = {
   patient: Patient
