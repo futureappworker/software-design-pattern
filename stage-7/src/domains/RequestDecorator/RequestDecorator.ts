@@ -9,6 +9,8 @@ export class RequestDecorator implements BaseRequestDecorator {
     }
 
     // 直接 log requests[0]
-    console.log(`\n[SUCCESS] \nurl: ${requests[0].url} \nhost: ${requests[0].host}\n`)
+    console.log(
+      `\n[SUCCESS] \nurl: ${requests[0].url} \nhost: ${requests[0].host}\n`,
+    )
   }
 }
