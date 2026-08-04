@@ -1,0 +1,11 @@
+[started] {"time": "2023-08-07 00:00:00", "quota": 10}
+[login] {"userId": "admin", "isAdmin": true}
+[login] {"userId": "1", "isAdmin": false}
+[login] {"userId": "2", "isAdmin": false}
+[go broadcasting] {"speakerId": "2"}
+[new message] {"authorId": "admin", "content": "king", "tags": ["bot"]}
+[new message] {"authorId": "1", "content": "A", "tags": ["bot"]}
+[new message] {"authorId": "1", "content": "C", "tags": ["bot"]}
+[new message] {"authorId": "1", "content": "A", "tags": ["bot"]}
+[20 seconds elapsed]
+[end]

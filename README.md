@@ -27,6 +27,8 @@
 
 - `stage-7` - 副本七：服務探索/負載平衡 (Service Discovery/ Load Balancing) 機制
 
+- `stage-8` - 副本八：社群機器人引擎 | 有限狀態機框架
+
 ## 執行
 
 OOP 技法一：依賴
@@ -107,6 +109,11 @@ pnpm exec tsx stage-6/src/index.ts
 副本七：服務探索/負載平衡 (Service Discovery/ Load Balancing) 機制
 ```bash
 pnpm exec tsx stage-7/src/index.ts
+```
+
+副本八：社群機器人引擎 | 有限狀態機框架
+```bash
+pnpm exec tsx stage-8/index.ts
 ```
 
 ## Node.js 環境執行 TypeScript
