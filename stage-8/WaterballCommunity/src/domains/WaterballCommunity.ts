@@ -73,8 +73,15 @@ export class WaterballCommunity {
     return this.quota
   }
 
-  setQuota(quota: number): void {
+  private setQuota(quota: number): void {
     this.quota = quota
+  }
+
+  consumeQuota(quota: number): void {
+    if (this.getQuota() - quota < 0) {
+      throw new Error('Quota not enough')
+    }
+    this.setQuota(this.getQuota() - quota)
   }
 
   getMembers(): Member[] {

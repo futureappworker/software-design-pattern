@@ -1,0 +1,13 @@
+import { Action } from "../../../../../../FSM/src"
+import { BaseEvent } from "../../../BaseEvent"
+import { PlayAgainCommandEvent } from "./PlayAgainCommandEvent"
+
+export class PlayAgainCommandConsumeQuotaAction implements Action<BaseEvent> {
+  execute(event: BaseEvent): void {
+    if (event instanceof PlayAgainCommandEvent) {
+      // 扣 5 Quota
+      const { context } = event.getPayload()
+      context.consumeQuota(5)
+    }
+  }
+}
