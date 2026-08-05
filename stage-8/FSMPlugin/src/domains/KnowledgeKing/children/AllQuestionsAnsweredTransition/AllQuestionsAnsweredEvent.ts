@@ -1,5 +1,9 @@
 import { BaseEvent, type BasePayload } from '../../../BaseEvent'
 
-export class AllQuestionsAnsweredEvent extends BaseEvent<BasePayload> {
+export type AllQuestionsAnsweredEventPayload = BasePayload & {
+  winnerMemberId: string | null
+}
+
+export class AllQuestionsAnsweredEvent extends BaseEvent<AllQuestionsAnsweredEventPayload> {
   readonly eventType = 'AllQuestionsAnsweredEvent'
 }

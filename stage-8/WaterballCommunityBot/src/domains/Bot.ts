@@ -1,7 +1,9 @@
 import type { FiniteStateMachine } from '../../../FSM/src'
 import {
+  AskQuestionEvent,
   KingCommandEvent,
   KingStopCommandEvent,
+  MessageReceivedEvent,
   PlayAgainCommandEvent,
   RecordCommandEvent,
   StopRecordingEvent,
@@ -65,6 +67,11 @@ export class Bot {
 
   handleMessage(context: WaterballCommunity, message: Message): void {
     let isHandled = false
+    const tags = message.getTags()
+    // tag 機器人的，才處理
+    if (!tags.includes('bot')) {
+      return
+    }
     switch (message.getContent()) {
       case 'king':
         isHandled = this.getFiniteStateMachine().trigger(
@@ -73,7 +80,15 @@ export class Bot {
             memberId: message.getAuthorId(),
           }),
         )
-        if (isHandled) return
+        if (isHandled) {
+          console.log('🤖: KnowledgeKing is started!')
+          this.getFiniteStateMachine().trigger(
+            new AskQuestionEvent({
+              context,
+            }),
+          )
+          return
+        }
         break
       case 'record':
         isHandled = this.getFiniteStateMachine().trigger(
@@ -114,10 +129,20 @@ export class Bot {
             context,
           }),
         )
-        if (isHandled) return
+        if (isHandled) {
+          console.log('🤖: KnowledgeKing is gonna start again!')
+          return
+        }
         break
       default:
         break
     }
+
+    this.getFiniteStateMachine().trigger(
+      new MessageReceivedEvent({
+        context,
+        message,
+      }),
+    )
   }
 }
