@@ -1,16 +1,11 @@
-// 範例輸入: ChatBot_Default_InitialMessageResponse.in
-// 範例輸出: ChatBot_Default_InitialMessageResponse.out
+// 範例輸入: ChatBot_Default_UserTagsBot.in
+// 範例輸出: ChatBot_Default_UserTagsBot.out
 
 import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { BotFacade } from '../../BotFacade/BotFacade'
-import {
-  Member,
-  MemberRole,
-  WaterballCommunity,
-} from '../../WaterballCommunity/src'
+import { login, newMessage, started } from './utils'
 
 const testcaseDir = dirname(fileURLToPath(import.meta.url))
 const baseName = 'ChatBot_Default_UserTagsBot'
@@ -32,33 +27,18 @@ describe('ChatBot_Default_UserTagsBot', () => {
       outputLines.push(args.map(String).join(' '))
     })
 
-    const bot = new BotFacade({
-      hasRecordFSM: true,
-      hasKnowledgeKingFSM: true,
-    })
-
     // [started] {"time": "2023-08-07 00:00:00", "quota": 20}
-    const waterballCommunity = new WaterballCommunity({
-      bot,
-      quota: 20,
-      members: [],
-    })
-
-    waterballCommunity.handleEnterNormalEvent()
+    const waterballCommunity = started({ time: '2023-08-07 00:00:00', quota: 20 })
 
     // [login] {"userId": "3", "isAdmin": false}
-    const member3 = new Member({
-      id: '3',
-      role: MemberRole.MEMBER,
-    })
-    waterballCommunity.addMember(member3)
-    waterballCommunity.login(member3.getId())
+    const member3 = login({ waterballCommunity, userId: '3', isAdmin: false })
 
-    // [new message] {"authorId": "3", "content": "Halo Bot!", "tags": []}
-    waterballCommunity.sendMessage({
+    // [new message] {"authorId": "3", "content": "Halo Bot!", "tags": ["bot"]}
+    newMessage({
+      waterballCommunity,
       authorId: member3.getId(),
       content: 'Halo Bot!',
-      tags: [bot.getId()],
+      tags: [waterballCommunity.getBot().getId()],
     })
 
     // [end]
