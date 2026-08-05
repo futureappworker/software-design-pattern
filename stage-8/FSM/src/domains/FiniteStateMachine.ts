@@ -92,7 +92,7 @@ export abstract class FiniteStateMachine<TEvent extends Event> {
     return this.currentChild
   }
 
-  private setCurrentChild(child: FiniteStateMachine<TEvent> | null): void {
+  setCurrentChild(child: FiniteStateMachine<TEvent> | null): void {
     this.currentChild = child
   }
 

@@ -27,7 +27,9 @@ export class NormalState extends State<BaseEvent> {
       throw new Error('NormalFSM not found')
     }
 
-    if (event.getPayload().context.getOnlineMemberCount() < 0) {
+    context.setCurrentChild(child)
+
+    if (event.getPayload().context.getOnlineMemberCount() < 10) {
       child.changeState(event, DefaultConversationState.getInstance())
     } else {
       child.changeState(event, InteractingState.getInstance())

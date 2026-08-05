@@ -35,7 +35,7 @@ export class InteractingState extends State<BaseEvent> {
       // 機器人，回應訊息給發文者
       context.sendMessage({
         authorId: bot.getId(),
-        content: bot.getNextResponseMessage(),
+        content: bot.getResponseMessage(),
         tags: [message.getAuthorId()],
       })
       return true

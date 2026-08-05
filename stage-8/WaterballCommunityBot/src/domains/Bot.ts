@@ -56,12 +56,12 @@ export class Bot {
     this.finiteStateMachine = finiteStateMachine
   }
 
-  getNextResponseMessage(): string {
-    this.responseMessageIndex++
+  getResponseMessage(): string {
     if (this.responseMessageIndex >= this.responseMessages.length) {
       this.responseMessageIndex = 0
     }
     const message = this.responseMessages[this.responseMessageIndex]
+    this.responseMessageIndex++
     return message
   }
 

@@ -27,6 +27,8 @@ export class RecordState extends State<BaseEvent> {
       throw new Error('NormalFSM not found')
     }
 
+    context.setCurrentChild(child)
+
     if (event instanceof RecordCommandEvent) {
       const waterballCommunity = event.getPayload().context
       if (waterballCommunity.hasActiveSpeaker()) {

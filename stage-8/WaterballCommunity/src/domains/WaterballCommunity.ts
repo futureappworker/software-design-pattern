@@ -104,6 +104,10 @@ export class WaterballCommunity {
     return this.members.find((m) => m.getId() === id)
   }
 
+  addMember(member: Member): void {
+    this.members.push(member)
+  }
+
   hasActiveSpeaker(): boolean {
     return this.broadcast.getIsActive()
   }
@@ -198,13 +202,14 @@ export class WaterballCommunity {
     content: string
     tags: string[]
   }) {
+    const isBot = authorId === this.getBot().getId()
     const sender = this.getMemberById(authorId)
 
-    if (!sender) {
+    if (!isBot && !sender) {
       throw new Error('Member not found')
     }
     // 必須 已登入
-    if (!sender.getIsOnline()) {
+    if (!isBot && !sender?.getIsOnline()) {
       throw new Error('尚未登入')
     }
 
@@ -218,7 +223,7 @@ export class WaterballCommunity {
 
     this.logMessage(message)
 
-    if (authorId !== this.getBot().getId()) {
+    if (authorId === this.getBot().getId()) {
       return
     }
 

@@ -24,6 +24,8 @@ export class KnowledgeKingState extends State<BaseEvent> {
       throw new Error('KnowledgeKing child FSM not found')
     }
 
+    context.setCurrentChild(child)
+
     child.changeState(event, QuestioningState.getInstance())
   }
 }

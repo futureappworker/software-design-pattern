@@ -46,6 +46,9 @@ export abstract class Transition<TEvent extends Event = Event> {
     currentState: State<TEvent>
     event: TEvent
   }): boolean {
+    if (!this.from) {
+      return this.eventType === event.eventType
+    }
     return this.from === currentState && this.eventType === event.eventType
   }
 }
