@@ -10,21 +10,21 @@ type Question = {
   answer: string
 }
 
-const question1 = `🤖: 請問哪個 SQL 語句用於選擇所有的行？
+const question1 = `請問哪個 SQL 語句用於選擇所有的行？
 A) SELECT *
 B) SELECT ALL
 C) SELECT ROWS
 D) SELECT DATA
 `
 
-const question2 = `🤖: 請問哪個 CSS 屬性可用於設置文字的顏色？
+const question2 = `請問哪個 CSS 屬性可用於設置文字的顏色？
 A) text-align
 B) font-size
 C) color
 D) padding
 `
 
-const question3 = `🤖: 請問在計算機科學中，「XML」代表什麼？
+const question3 = `請問在計算機科學中，「XML」代表什麼？
 A) Extensible Markup Language
 B) Extensible Modeling Language
 C) Extended Markup Language
@@ -50,7 +50,7 @@ export class QuestioningState extends State<BaseEvent> {
   private static instance: QuestioningState
   private readonly questions = questions
   private currentQuestionIndex: number = 0
-  private scores = new Map<string, number>()
+  private readonly scores = new Map<string, number>()
 
   private startedAt: Date | null = null
   private readonly durationSeconds = 60 * 60 // 1 hour
@@ -119,18 +119,27 @@ export class QuestioningState extends State<BaseEvent> {
     this.scores.set(memberId, score + 1)
   }
 
-  private getHighestScoringMemberId(): string | null {
-    let highestMemberId: string | null = null
+  private getWinnerMemberId(): string | null {
     let highestScore = -1
+    let winners: string[] = []
 
     for (const [memberId, score] of this.scores) {
       if (score > highestScore) {
         highestScore = score
-        highestMemberId = memberId
+        winners = [memberId]
+        continue
+      }
+
+      if (score === highestScore) {
+        winners.push(memberId)
       }
     }
 
-    return highestMemberId
+    if (winners.length !== 1) {
+      return null
+    }
+
+    return winners[0]
   }
 
   private clearScores(): void {
@@ -138,11 +147,11 @@ export class QuestioningState extends State<BaseEvent> {
   }
 
   private reset() {
+    this.stopTimer()
+
+    this.startedAt = null
     this.currentQuestionIndex = 0
     this.clearScores()
-
-    this.stopTimer()
-    this.startedAt = null
   }
 
   enter(event: BaseEvent, context: FiniteStateMachine<BaseEvent>): void {
@@ -168,7 +177,14 @@ export class QuestioningState extends State<BaseEvent> {
     if (event instanceof AskQuestionEvent) {
       const currentQuestion = this.getCurrentQuestion()
       if (currentQuestion) {
-        console.log(currentQuestion.question)
+        const waterballCommunity = event.getPayload().context
+        const content = `${this.currentQuestionIndex}. ${currentQuestion.question}`
+        // 發送問題到聊天室
+        waterballCommunity.sendMessage({
+          authorId: waterballCommunity.getBot().getId(),
+          content,
+          tags: [],
+        })
       }
       return true
     }
@@ -183,11 +199,15 @@ export class QuestioningState extends State<BaseEvent> {
       const currentQuestion = this.getCurrentQuestion()
       if (currentQuestion) {
         const answer = currentQuestion.answer
-        if (answer === event.getPayload().message.getContent()) {
+        const waterballCommunity = event.getPayload().context
+        const botId = waterballCommunity.getBot().getId()
+        if (answer === event.getPayload().message.getContent().trim()) {
           // 答對了
-          console.log(
-            `🤖: Congrats! you got the answer! @${message.getAuthorId()}`,
-          )
+          waterballCommunity.sendMessage({
+            authorId: botId,
+            content: 'Congrats! you got the answer!',
+            tags: [message.getAuthorId()],
+          })
 
           // 每一題中的第一位正確答題者會獲得 1 分
           this.addScore(message.getAuthorId())
@@ -195,8 +215,7 @@ export class QuestioningState extends State<BaseEvent> {
           // 如果是最後一題，則結束問答
           if (this.currentQuestionIndex === this.questions.length - 1) {
             // 每一題都答完了，就進入感謝參與狀態
-            const winnerMemberId: string | null =
-              this.getHighestScoringMemberId()
+            const winnerMemberId: string | null = this.getWinnerMemberId()
             context.trigger(
               new AllQuestionsAnsweredEvent({
                 context: event.getPayload().context,

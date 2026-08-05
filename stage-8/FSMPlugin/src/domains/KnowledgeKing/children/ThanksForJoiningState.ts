@@ -65,14 +65,34 @@ export class ThanksForJoiningState extends State<BaseEvent> {
     this.reset()
     if (event instanceof AllQuestionsAnsweredEvent) {
       const { winnerMemberId } = event.getPayload()
-      console.log('🤖 go broadcasting...')
+
+      const waterballCommunity = event.getPayload().context
+      const botId = waterballCommunity.getBot().getId()
+
+      waterballCommunity.sendMessage({
+        authorId: botId,
+        content: 'record',
+        tags: [],
+      })
+
       if (winnerMemberId) {
-        console.log(`🤖 speaking: The winner is ${winnerMemberId}`)
+        waterballCommunity.speak({
+          speakerId: botId,
+          content: `The winner is ${winnerMemberId}`,
+        })
       }
       if (!winnerMemberId) {
-        console.log('🤖 speaking: Tie!')
+        waterballCommunity.speak({
+          speakerId: botId,
+          content: 'Tie!',
+        })
       }
-      console.log('🤖 stop broadcasting..')
+
+      waterballCommunity.sendMessage({
+        authorId: botId,
+        content: 'stop-recording',
+        tags: [],
+      })
 
       const onTimeout = () => {
         context.trigger(

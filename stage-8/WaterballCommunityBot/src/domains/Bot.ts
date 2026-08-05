@@ -68,8 +68,11 @@ export class Bot {
   handleMessage(context: WaterballCommunity, message: Message): void {
     let isHandled = false
     const tags = message.getTags()
-    // tag 機器人的，才處理
-    if (!tags.includes('bot')) {
+    // 若是 會員 的 message，要 tag 機器人的，才處理
+    if (
+      message.getAuthorId() !== context.getBot().getId() &&
+      !tags.includes('bot')
+    ) {
       return
     }
     switch (message.getContent()) {
@@ -81,7 +84,11 @@ export class Bot {
           }),
         )
         if (isHandled) {
-          console.log('🤖: KnowledgeKing is started!')
+          context.sendMessage({
+            authorId: context.getBot().getId(),
+            content: 'KnowledgeKing is started!',
+            tags: [],
+          })
           this.getFiniteStateMachine().trigger(
             new AskQuestionEvent({
               context,
@@ -98,7 +105,11 @@ export class Bot {
           }),
         )
         if (isHandled) {
-          console.log(`📢 ${message.getAuthorId()} is broadcasting...`)
+          if (message.getAuthorId() === context.getBot().getId()) {
+            console.log('🤖 go broadcasting...')
+          } else {
+            console.log(`📢 ${message.getAuthorId()} is broadcasting...`)
+          }
           return
         }
         break
@@ -110,7 +121,13 @@ export class Bot {
           }),
         )
         if (isHandled) {
-          context.getBroadcast().recordReplay()
+          context.getBroadcast().recordReplay(context)
+
+          if (message.getAuthorId() === context.getBot().getId()) {
+            console.log('🤖 stop broadcasting...')
+          } else {
+            console.log(`📢 ${message.getAuthorId()} stop broadcasting`)
+          }
           return
         }
         break
@@ -130,7 +147,11 @@ export class Bot {
           }),
         )
         if (isHandled) {
-          console.log('🤖: KnowledgeKing is gonna start again!')
+          context.sendMessage({
+            authorId: context.getBot().getId(),
+            content: 'KnowledgeKing is gonna start again!',
+            tags: [],
+          })
           return
         }
         break

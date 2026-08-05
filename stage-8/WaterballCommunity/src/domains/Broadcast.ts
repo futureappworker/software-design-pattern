@@ -1,4 +1,5 @@
 import type { Member } from './Member'
+import type { WaterballCommunity } from './WaterballCommunity'
 
 type BroadcastProps = {
   isActive?: boolean
@@ -70,9 +71,18 @@ export class Broadcast {
     console.log(`📢 ${speakerId}: ${content}`)
   }
 
-  recordReplay() {
+  recordReplay(waterballCommunity: WaterballCommunity) {
+    const botId = waterballCommunity.getBot().getId()
     const speakerId = this.getSpeaker()?.getId()
+    if (!speakerId) {
+      throw new Error('尚未有講者')
+    }
     const contentsString = this.getContents().join('\n')
-    console.log(`🤖: [Record Replay] ${contentsString} @${speakerId}`)
+
+    waterballCommunity.sendMessage({
+      authorId: botId,
+      content: `[Record Replay] ${contentsString}`,
+      tags: [speakerId],
+    })
   }
 }
