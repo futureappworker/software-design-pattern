@@ -336,4 +336,12 @@ export class WaterballCommunity {
 
     this.logComment(comment)
   }
+
+  speak({ speakerId, content }: { speakerId: string; content: string }) {
+    const broadcast = this.getBroadcast()
+    if (broadcast.getSpeaker()?.getId() !== speakerId) {
+      return
+    }
+    broadcast.speak(content)
+  }
 }

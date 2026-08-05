@@ -82,7 +82,10 @@ export class Bot {
             memberId: message.getAuthorId(),
           }),
         )
-        if (isHandled) return
+        if (isHandled) {
+          console.log(`📢 ${message.getAuthorId()} is broadcasting...`)
+          return
+        }
         break
       case 'stop-recording':
         isHandled = this.getFiniteStateMachine().trigger(
@@ -91,7 +94,10 @@ export class Bot {
             memberId: message.getAuthorId(),
           }),
         )
-        if (isHandled) return
+        if (isHandled) {
+          context.getBroadcast().recordReplay()
+          return
+        }
         break
       case 'king-stop':
         isHandled = this.getFiniteStateMachine().trigger(

@@ -8,6 +8,7 @@ type BroadcastProps = {
 export class Broadcast {
   private isActive: boolean = false
   private speaker: Member | null = null
+  private contents: string[] = []
 
   constructor({ isActive = false, speaker = null }: BroadcastProps) {
     this.setIsActive(isActive)
@@ -30,6 +31,18 @@ export class Broadcast {
     this.speaker = speaker
   }
 
+  getContents(): string[] {
+    return [...this.contents]
+  }
+
+  setContents(contents: string[]): void {
+    this.contents = [...contents]
+  }
+
+  private addContent(content: string): void {
+    this.contents.push(content)
+  }
+
   goBroadcasting(speaker: Member): void {
     this.setIsActive(true)
     this.setSpeaker(speaker)
@@ -40,7 +53,7 @@ export class Broadcast {
     this.setSpeaker(null)
   }
 
-  speak(_message: string): void {
+  speak(content: string): void {
     // 必須 已開始廣播
     if (!this.getIsActive()) {
       throw new Error('尚未開始廣播')
@@ -51,6 +64,15 @@ export class Broadcast {
       throw new Error('尚未有講者')
     }
 
-    // TODO
+    const speakerId = this.getSpeaker()?.getId()
+
+    this.addContent(content)
+    console.log(`📢 ${speakerId}: ${content}`)
+  }
+
+  recordReplay() {
+    const speakerId = this.getSpeaker()?.getId()
+    const contentsString = this.getContents().join('\n')
+    console.log(`🤖: [Record Replay] ${contentsString} @${speakerId}`)
   }
 }
