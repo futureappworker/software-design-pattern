@@ -28,7 +28,10 @@ describe('ChatBot_Default_UserTagsBot', () => {
     })
 
     // [started] {"time": "2023-08-07 00:00:00", "quota": 20}
-    const waterballCommunity = started({ time: '2023-08-07 00:00:00', quota: 20 })
+    const waterballCommunity = started({
+      time: '2023-08-07 00:00:00',
+      quota: 20,
+    })
 
     // [login] {"userId": "3", "isAdmin": false}
     const member3 = login({ waterballCommunity, userId: '3', isAdmin: false })

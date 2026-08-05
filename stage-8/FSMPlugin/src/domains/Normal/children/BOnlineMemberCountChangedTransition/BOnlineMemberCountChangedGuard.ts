@@ -1,6 +1,6 @@
 import type { Guard } from '../../../../../../FSM/src/index'
 import type { BaseEvent } from '../../../BaseEvent'
-import { OnlineMemberCountChangedEvent } from './OnlineMemberCountChangedEvent'
+import { OnlineMemberCountChangedEvent } from '../AOnlineMemberCountChangedTransition/OnlineMemberCountChangedEvent'
 
 export class BOnlineMemberCountChangedGuard implements Guard<BaseEvent> {
   evaluate(event: BaseEvent): boolean {

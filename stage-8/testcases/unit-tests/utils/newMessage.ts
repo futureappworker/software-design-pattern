@@ -1,4 +1,4 @@
-import { WaterballCommunity } from "../../../WaterballCommunity/src"
+import type { WaterballCommunity } from '../../../WaterballCommunity/src'
 
 type NewMessageParams = {
   waterballCommunity: WaterballCommunity
@@ -7,7 +7,12 @@ type NewMessageParams = {
   tags: string[]
 }
 
-export function newMessage({ waterballCommunity, authorId, content, tags }: NewMessageParams): void {
+export function newMessage({
+  waterballCommunity,
+  authorId,
+  content,
+  tags,
+}: NewMessageParams): void {
   waterballCommunity.sendMessage({
     authorId,
     content,

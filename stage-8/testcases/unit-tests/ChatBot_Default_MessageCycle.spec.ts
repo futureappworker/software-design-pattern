@@ -28,7 +28,10 @@ describe('ChatBot_Default_MessageCycle', () => {
     })
 
     // [started] {"time": "2023-08-07 00:00:00", "quota": 20}
-    const waterballCommunity = started({ time: '2023-08-07 00:00:00', quota: 20 })
+    const waterballCommunity = started({
+      time: '2023-08-07 00:00:00',
+      quota: 20,
+    })
 
     // [login] {"userId": "1", "isAdmin": false}
     const member1 = login({ waterballCommunity, userId: '1', isAdmin: false })
