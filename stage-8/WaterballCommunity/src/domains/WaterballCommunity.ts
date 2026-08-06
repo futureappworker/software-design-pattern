@@ -187,7 +187,7 @@ export class WaterballCommunity {
     }
 
     if (tags.length > 0) {
-      result += ` @${tags.join(', ')}`
+      result += ` @${tags.join(', @')}`
     }
 
     console.log(result)
@@ -248,7 +248,7 @@ export class WaterballCommunity {
     let result = `${memberId}: 【${title}】${content}`
 
     if (tags.length > 0) {
-      result += ` @${tags.join(', ')}`
+      result += ` @${tags.join(', @')}`
     }
 
     console.log(result)
@@ -304,7 +304,7 @@ export class WaterballCommunity {
     if (memberId === this.getBot().getId()) {
       result = `🤖 comment in post ${postId}: ${content}`
       if (tags.length > 0) {
-        result += ` @${tags.join(', ')}`
+        result += ` @${tags.join(', @')}`
       }
       console.log(result)
     }
