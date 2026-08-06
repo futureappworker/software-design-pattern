@@ -282,7 +282,7 @@ export class WaterballCommunity {
 
     this.logPost(post)
 
-    if (authorId !== this.getBot().getId()) {
+    if (authorId === this.getBot().getId()) {
       return
     }
 
@@ -321,8 +321,9 @@ export class WaterballCommunity {
     content: string
     tags?: string[]
   }) {
+    const isBot = memberId === this.getBot().getId()
     const member = this.getMemberById(memberId)
-    if (!member) {
+    if (!isBot && !member) {
       throw new Error('Member not found')
     }
     const post = this.getForum().getPostById(postId)
