@@ -1,88 +1,89 @@
-import type { Member } from './Member'
-import type { WaterballCommunity } from './WaterballCommunity'
-
 type BroadcastProps = {
-  isActive?: boolean
-  speaker?: Member | null
+  isRecording?: boolean
+  speakerId?: string | null
 }
 
 export class Broadcast {
-  private isActive: boolean = false
-  private speaker: Member | null = null
-  private contents: string[] = []
+  private isRecording: boolean = false
+  private speakerId: string | null = null
+  private records: string[] = []
 
-  constructor({ isActive = false, speaker = null }: BroadcastProps) {
-    this.setIsActive(isActive)
-    this.setSpeaker(speaker)
+  constructor({ isRecording = false, speakerId = null }: BroadcastProps) {
+    this.setIsRecording(isRecording)
+    this.setSpeakerId(speakerId)
   }
 
-  getIsActive(): boolean {
-    return this.isActive
+  getIsRecording(): boolean {
+    return this.isRecording
   }
 
-  setIsActive(isActive: boolean): void {
-    this.isActive = isActive
+  setIsRecording(isRecording: boolean): void {
+    this.isRecording = isRecording
   }
 
-  getSpeaker(): Member | null {
-    return this.speaker
+  getSpeakerId(): string | null {
+    return this.speakerId
   }
 
-  setSpeaker(speaker: Member | null): void {
-    this.speaker = speaker
+  setSpeakerId(speakerId: string | null): void {
+    this.speakerId = speakerId
   }
 
-  getContents(): string[] {
-    return [...this.contents]
+  getRecords(): string[] {
+    return [...this.records]
   }
 
-  setContents(contents: string[]): void {
-    this.contents = [...contents]
+  setRecords(records: string[]): void {
+    this.records = [...records]
   }
 
-  private addContent(content: string): void {
-    this.contents.push(content)
+  addRecord(record: string): void {
+    this.records.push(record)
   }
 
-  goBroadcasting(speaker: Member): void {
-    this.setIsActive(true)
-    this.setSpeaker(speaker)
+  goBroadcasting({ speakerId }: { speakerId: string }): void {
+    this.speakerId = speakerId
+    console.log(`📢 ${speakerId} is broadcasting...`)
   }
 
-  stopBroadcasting(): void {
-    this.setIsActive(false)
-    this.setSpeaker(null)
-  }
-
-  speak(content: string): void {
-    // 必須 已開始廣播
-    if (!this.getIsActive()) {
-      throw new Error('尚未開始廣播')
+  stopBroadcasting({ speakerId }: { speakerId: string }): void {
+    if (speakerId !== this.speakerId) {
+      return
     }
 
-    // 必須 有講者
-    if (!this.getSpeaker()) {
-      throw new Error('尚未有講者')
-    }
-
-    const speakerId = this.getSpeaker()?.getId()
-
-    this.addContent(content)
-    console.log(`📢 ${speakerId}: ${content}`)
+    this.speakerId = null
+    console.log(`📢 ${speakerId} stop broadcasting`)
   }
 
-  recordReplay(waterballCommunity: WaterballCommunity) {
-    const botId = waterballCommunity.getBot().getId()
-    const speakerId = this.getSpeaker()?.getId()
-    if (!speakerId) {
-      throw new Error('尚未有講者')
-    }
-    const contentsString = this.getContents().join('\n')
+  recordReplay() {
+    console.log(
+      `🤖: [Record Replay] ${this.records.join('\n')} @${this.speakerId}`,
+    )
+  }
 
-    waterballCommunity.sendMessage({
-      authorId: botId,
-      content: `[Record Replay] ${contentsString}`,
-      tags: [speakerId],
-    })
+  speak({
+    isBot,
+    speakerId,
+    content,
+  }: {
+    isBot: boolean
+    speakerId: string
+    content: string
+  }): void {
+    if (speakerId !== this.speakerId) {
+      return
+    }
+
+    if (!isBot) {
+      console.log(`📢 ${speakerId}: ${content}`)
+    }
+
+    if (isBot) {
+      console.log(`🤖 speaking: ${content}`)
+    }
+
+    if (this.isRecording) {
+      this.addRecord(content)
+    }
   }
 }

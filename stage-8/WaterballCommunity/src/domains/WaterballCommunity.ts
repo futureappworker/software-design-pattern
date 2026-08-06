@@ -109,7 +109,7 @@ export class WaterballCommunity {
   }
 
   hasActiveSpeaker(): boolean {
-    return this.broadcast.getIsActive()
+    return this.broadcast.getSpeakerId() !== null
   }
 
   triggerEvent(event: BaseEvent<BasePayload>): void {
@@ -345,9 +345,26 @@ export class WaterballCommunity {
 
   speak({ speakerId, content }: { speakerId: string; content: string }) {
     const broadcast = this.getBroadcast()
-    if (broadcast.getSpeaker()?.getId() !== speakerId) {
+    if (broadcast.getSpeakerId() !== speakerId) {
       return
     }
-    broadcast.speak(content)
+    const isBot = speakerId === this.getBot().getId()
+    broadcast.speak({ isBot, speakerId, content })
+  }
+
+  goBroadcasting({ speakerId }: { speakerId: string }): void {
+    const member = this.getMemberById(speakerId)
+    if (!member) {
+      throw new Error('Member not found')
+    }
+    this.getBroadcast().goBroadcasting({ speakerId })
+  }
+
+  stopBroadcasting({ speakerId }: { speakerId: string }): void {
+    const member = this.getMemberById(speakerId)
+    if (!member) {
+      throw new Error('Member not found')
+    }
+    this.getBroadcast().stopBroadcasting({ speakerId })
   }
 }

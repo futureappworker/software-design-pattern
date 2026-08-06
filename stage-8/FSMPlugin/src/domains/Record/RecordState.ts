@@ -3,7 +3,7 @@ import { type FiniteStateMachine, State } from '../../../../FSM/src/index'
 import type { BaseEvent } from '../BaseEvent'
 import { RecordingState } from './children/RecordingState'
 import { WaitingState } from './children/WaitingState'
-import { RecordCommandEvent } from './transitions/RecordCommandTransition/RecordCommandEvent'
+import { StopRecordingCommandEvent } from './transitions/StopRecordingCommandTransition/StopRecordingCommandEvent'
 
 export class RecordState extends State<BaseEvent> {
   private static instance: RecordState
@@ -29,13 +29,19 @@ export class RecordState extends State<BaseEvent> {
 
     context.setCurrentChild(child)
 
-    if (event instanceof RecordCommandEvent) {
+    const waterballCommunity = event.getPayload().context
+    const hasActiveSpeaker = waterballCommunity.hasActiveSpeaker()
+    if (!hasActiveSpeaker) {
+      child.changeState(event, WaitingState.getInstance())
+    } else {
+      child.changeState(event, RecordingState.getInstance())
+    }
+  }
+
+  exit(event: BaseEvent, _context: FiniteStateMachine<BaseEvent>): void {
+    if (event instanceof StopRecordingCommandEvent) {
       const waterballCommunity = event.getPayload().context
-      if (waterballCommunity.hasActiveSpeaker()) {
-        child.changeState(event, RecordingState.getInstance())
-      } else {
-        child.changeState(event, WaitingState.getInstance())
-      }
+      waterballCommunity.getBroadcast().recordReplay()
     }
   }
 }

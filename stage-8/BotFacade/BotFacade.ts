@@ -11,10 +11,11 @@ import { AOnlineMemberCountChangedTransition } from '../FSMPlugin/src/domains/No
 import { BOnlineMemberCountChangedTransition } from '../FSMPlugin/src/domains/Normal/children/BOnlineMemberCountChangedTransition/BOnlineMemberCountChangedTransition'
 import { NormalFSM } from '../FSMPlugin/src/domains/Normal/NormalFSM'
 import { EnterNormalTransition } from '../FSMPlugin/src/domains/Normal/transitions/EnterNormalTransition/EnterNormalTransition'
+import { StartBroadcastingTransition } from '../FSMPlugin/src/domains/Record/children/StartBroadcastingTransition/StartBroadcastingTransition'
 import { StopBroadcastingTransition } from '../FSMPlugin/src/domains/Record/children/StopBroadcastingTransition/StopBroadcastingTransition'
 import { RecordFSM } from '../FSMPlugin/src/domains/Record/RecordFSM'
 import { RecordCommandTransition } from '../FSMPlugin/src/domains/Record/transitions/RecordCommandTransition/RecordCommandTransition'
-import { StopRecordingTransition } from '../FSMPlugin/src/domains/Record/transitions/StopRecordingTransition/StopRecordingTransition'
+import { StopRecordingCommandTransition } from '../FSMPlugin/src/domains/Record/transitions/StopRecordingCommandTransition/StopRecordingCommandTransition'
 import { RootFSM } from '../FSMPlugin/src/domains/RootFSM'
 import { Bot } from '../WaterballCommunityBot/src'
 
@@ -64,12 +65,13 @@ export class BotFacade extends Bot {
     finiteStateMachine: FiniteStateMachine<BaseEvent>,
   ): void {
     const recordFSM = new RecordFSM({})
+    recordFSM.addTransition(new StartBroadcastingTransition())
     recordFSM.addTransition(new StopBroadcastingTransition())
 
     finiteStateMachine.addChild(recordFSM)
 
     finiteStateMachine.addTransition(new RecordCommandTransition())
-    finiteStateMachine.addTransition(new StopRecordingTransition())
+    finiteStateMachine.addTransition(new StopRecordingCommandTransition())
   }
 
   private addKnowledgeKingFSM(

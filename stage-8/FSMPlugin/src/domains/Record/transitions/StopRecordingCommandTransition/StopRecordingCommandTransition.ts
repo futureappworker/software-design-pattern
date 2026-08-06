@@ -3,8 +3,8 @@ import type { BaseEvent } from '../../../BaseEvent'
 import { NormalState } from '../../../Normal/NormalState'
 import { RecordState } from '../../RecordState'
 
-export class StopRecordingTransition extends Transition<BaseEvent> {
-  readonly eventType = 'StopRecordingEvent'
+export class StopRecordingCommandTransition extends Transition<BaseEvent> {
+  readonly eventType = 'StopRecordingCommandEvent'
   readonly guard = null
   readonly from = RecordState.getInstance()
   readonly to = NormalState.getInstance()

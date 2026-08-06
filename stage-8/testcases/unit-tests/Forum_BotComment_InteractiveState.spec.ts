@@ -28,7 +28,10 @@ describe('Forum_BotComment_InteractiveState', () => {
     })
 
     // [started] {"time": "2023-08-07 00:00:00", "quota": 1}
-    const waterballCommunity = started({ time: '2023-08-07 00:00:00', quota: 1 })
+    const waterballCommunity = started({
+      time: '2023-08-07 00:00:00',
+      quota: 1,
+    })
 
     // [login] {"userId": "1".."10", "isAdmin": false}
     const members = Array.from({ length: 10 }, (_, i) =>

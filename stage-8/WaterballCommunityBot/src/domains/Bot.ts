@@ -6,7 +6,7 @@ import {
   MessageReceivedEvent,
   PlayAgainCommandEvent,
   RecordCommandEvent,
-  StopRecordingEvent,
+  StopRecordingCommandEvent,
 } from '../../../FSMPlugin/events'
 import type { BaseEvent } from '../../../FSMPlugin/src/domains/BaseEvent'
 import type {
@@ -104,32 +104,16 @@ export class Bot {
             memberId: message.getAuthorId(),
           }),
         )
-        if (isHandled) {
-          if (message.getAuthorId() === context.getBot().getId()) {
-            console.log('🤖 go broadcasting...')
-          } else {
-            console.log(`📢 ${message.getAuthorId()} is broadcasting...`)
-          }
-          return
-        }
+        if (isHandled) return
         break
       case 'stop-recording':
         isHandled = this.getFiniteStateMachine().trigger(
-          new StopRecordingEvent({
+          new StopRecordingCommandEvent({
             context,
             memberId: message.getAuthorId(),
           }),
         )
-        if (isHandled) {
-          context.getBroadcast().recordReplay(context)
-
-          if (message.getAuthorId() === context.getBot().getId()) {
-            console.log('🤖 stop broadcasting...')
-          } else {
-            console.log(`📢 ${message.getAuthorId()} stop broadcasting`)
-          }
-          return
-        }
+        if (isHandled) return
         break
       case 'king-stop':
         isHandled = this.getFiniteStateMachine().trigger(
