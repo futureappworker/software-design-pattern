@@ -1,16 +1,23 @@
 type BroadcastProps = {
   isRecording?: boolean
   speakerId?: string | null
+  recorderId?: string | null
 }
 
 export class Broadcast {
   private isRecording: boolean = false
   private speakerId: string | null = null
+  private recorderId: string | null = null
   private records: string[] = []
 
-  constructor({ isRecording = false, speakerId = null }: BroadcastProps) {
+  constructor({
+    isRecording = false,
+    speakerId = null,
+    recorderId = null,
+  }: BroadcastProps) {
     this.setIsRecording(isRecording)
     this.setSpeakerId(speakerId)
+    this.setRecorderId(recorderId)
   }
 
   getIsRecording(): boolean {
@@ -29,6 +36,14 @@ export class Broadcast {
     this.speakerId = speakerId
   }
 
+  getRecorderId(): string | null {
+    return this.recorderId
+  }
+
+  setRecorderId(recorderId: string | null): void {
+    this.recorderId = recorderId
+  }
+
   getRecords(): string[] {
     return [...this.records]
   }
@@ -43,7 +58,6 @@ export class Broadcast {
 
   goBroadcasting({ speakerId }: { speakerId: string }): void {
     this.speakerId = speakerId
-    console.log(`📢 ${speakerId} is broadcasting...`)
   }
 
   stopBroadcasting({ speakerId }: { speakerId: string }): void {
@@ -52,34 +66,17 @@ export class Broadcast {
     }
 
     this.speakerId = null
-    console.log(`📢 ${speakerId} stop broadcasting`)
   }
 
   recordReplay() {
     console.log(
-      `🤖: [Record Replay] ${this.records.join('\n')} @${this.speakerId}`,
+      `🤖: [Record Replay] ${this.records.join('\n')} @${this.recorderId}`,
     )
   }
 
-  speak({
-    isBot,
-    speakerId,
-    content,
-  }: {
-    isBot: boolean
-    speakerId: string
-    content: string
-  }): void {
+  speak({ speakerId, content }: { speakerId: string; content: string }): void {
     if (speakerId !== this.speakerId) {
       return
-    }
-
-    if (!isBot) {
-      console.log(`📢 ${speakerId}: ${content}`)
-    }
-
-    if (isBot) {
-      console.log(`🤖 speaking: ${content}`)
     }
 
     if (this.isRecording) {

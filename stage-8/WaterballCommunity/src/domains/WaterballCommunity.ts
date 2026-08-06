@@ -2,6 +2,8 @@ import {
   EnterNormalEvent,
   OnlineMemberCountChangedEvent,
   PublishPostEvent,
+  StartBroadcastingEvent,
+  StopBroadcastingEvent,
 } from '../../../FSMPlugin/events'
 import type {
   BaseEvent,
@@ -227,17 +229,17 @@ export class WaterballCommunity {
       return
     }
 
-    // 如果 tags 中有 'bot', 即指令
-    if (tags.includes('bot')) {
-      this.getBot().handleMessage(this, message)
-    }
-
     this.triggerEvent(
       new SendMessageEvent({
         context: this,
         message,
       }),
     )
+
+    // 如果 tags 中有 'bot', 即指令
+    if (tags.includes('bot')) {
+      this.getBot().handleMessage(this, message)
+    }
   }
 
   private logPost(post: Post): void {
@@ -349,7 +351,14 @@ export class WaterballCommunity {
       return
     }
     const isBot = speakerId === this.getBot().getId()
-    broadcast.speak({ isBot, speakerId, content })
+    broadcast.speak({ speakerId, content })
+    if (!isBot) {
+      console.log(`📢 ${speakerId}: ${content}`)
+    }
+
+    if (isBot) {
+      console.log(`🤖 speaking: ${content}`)
+    }
   }
 
   goBroadcasting({ speakerId }: { speakerId: string }): void {
@@ -358,6 +367,18 @@ export class WaterballCommunity {
       throw new Error('Member not found')
     }
     this.getBroadcast().goBroadcasting({ speakerId })
+    const isBot = speakerId === this.getBot().getId()
+    if (isBot) {
+      console.log('🤖 go broadcasting...')
+    }
+    if (!isBot) {
+      console.log(`📢 ${speakerId} is broadcasting...`)
+    }
+    this.triggerEvent(
+      new StartBroadcastingEvent({
+        context: this,
+      }),
+    )
   }
 
   stopBroadcasting({ speakerId }: { speakerId: string }): void {
@@ -365,6 +386,23 @@ export class WaterballCommunity {
     if (!member) {
       throw new Error('Member not found')
     }
-    this.getBroadcast().stopBroadcasting({ speakerId })
+    const broadcast = this.getBroadcast()
+    const isBot = speakerId === this.getBot().getId()
+    if (isBot) {
+      console.log('🤖 stop broadcasting...')
+    }
+    if (!isBot) {
+      console.log(`📢 ${speakerId} stop broadcasting`)
+    }
+    if (broadcast.getIsRecording()) {
+      broadcast.recordReplay()
+    }
+    this.triggerEvent(
+      new StopBroadcastingEvent({
+        context: this,
+        speakerId,
+      }),
+    )
+    broadcast.stopBroadcasting({ speakerId })
   }
 }

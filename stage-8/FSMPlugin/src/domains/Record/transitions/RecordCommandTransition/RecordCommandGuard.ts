@@ -9,12 +9,6 @@ export class RecordCommandGuard implements Guard<BaseEvent> {
     }
 
     const { context } = event.getPayload()
-    const hasActiveSpeaker = context.hasActiveSpeaker()
-
-    if (hasActiveSpeaker) {
-      return false
-    }
-
     const quota = context.getQuota()
 
     if (quota < 3) {

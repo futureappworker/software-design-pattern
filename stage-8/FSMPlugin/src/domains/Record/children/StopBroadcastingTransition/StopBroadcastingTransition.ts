@@ -2,12 +2,12 @@ import { Transition } from '../../../../../../FSM/src/index'
 import type { BaseEvent } from '../../../BaseEvent'
 import { RecordingState } from '../RecordingState'
 import { WaitingState } from '../WaitingState'
-import { RecordReplayAction } from './recordReplayAction'
+import { StopRecordingCommandGuard } from './StopBroadcastingGuard'
 
 export class StopBroadcastingTransition extends Transition<BaseEvent> {
   readonly eventType = 'StopBroadcastingEvent'
-  readonly guard = null
+  readonly guard = new StopRecordingCommandGuard()
   readonly from = RecordingState.getInstance()
   readonly to = WaitingState.getInstance()
-  readonly actions = [new RecordReplayAction()]
+  readonly actions = []
 }
