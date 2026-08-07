@@ -136,6 +136,11 @@ export class Bot {
             content: 'KnowledgeKing is gonna start again!',
             tags: [],
           })
+          this.getFiniteStateMachine().trigger(
+            new AskQuestionEvent({
+              context,
+            }),
+          )
           return
         }
         break
