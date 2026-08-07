@@ -109,8 +109,7 @@ export abstract class FiniteStateMachine<TEvent extends Event> {
         })
       ) {
         if (!transition.execute(event, this)) {
-          // 如果 transition 执行失败，则返回 true，表示事件被处理
-          return true
+          continue
         }
 
         this.setCurrentState(transition.getTo())
