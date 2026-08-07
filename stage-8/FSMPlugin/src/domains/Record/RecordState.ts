@@ -47,9 +47,7 @@ export class RecordState extends State<BaseEvent> {
 
   exit(event: BaseEvent, _context: FiniteStateMachine<BaseEvent>): void {
     if (event instanceof StopRecordingCommandEvent) {
-      const waterballCommunity = event.getPayload().context
-      waterballCommunity.getBroadcast().setIsRecording(false)
-      waterballCommunity.getBroadcast().recordReplay()
+      event.getPayload().context.getBroadcast().reset()
     }
   }
 }

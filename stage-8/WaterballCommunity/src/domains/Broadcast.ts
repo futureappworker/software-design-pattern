@@ -69,9 +69,21 @@ export class Broadcast {
   }
 
   recordReplay() {
+    if (this.records.length === 0) {
+      return
+    }
+
     console.log(
       `🤖: [Record Replay] ${this.records.join('\n')} @${this.recorderId}`,
     )
+    this.records = []
+  }
+
+  reset(): void {
+    this.recordReplay()
+    this.isRecording = false
+    this.recorderId = null
+    this.records = []
   }
 
   speak({ speakerId, content }: { speakerId: string; content: string }): void {

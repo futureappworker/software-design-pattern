@@ -9,8 +9,8 @@ export class StartRecordingCommandGuard implements Guard<BaseEvent> {
     }
 
     const { context: waterballCommunity } = event.getPayload()
-    // 如果当前有正在广播的 speaker，则返回 false
-    if (waterballCommunity.getBroadcast().getSpeakerId() !== null) {
+    // goBroadcasting 會先設 speaker 再觸發事件；有講者才進入 Recording
+    if (waterballCommunity.getBroadcast().getSpeakerId() === null) {
       return false
     }
 
