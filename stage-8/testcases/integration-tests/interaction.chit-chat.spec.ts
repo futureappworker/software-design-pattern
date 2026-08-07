@@ -198,8 +198,7 @@ describe('interaction.chit-chat', () => {
       waterballCommunity,
       id: '2',
       authorId: member8.getId(),
-      title:
-        '分享一個關於 單一職責原則 的笑話，每次講起來都還是覺得很好笑',
+      title: '分享一個關於 單一職責原則 的笑話，每次講起來都還是覺得很好笑',
       content:
         '(1) 欸你這個類別這樣做太多事了吧，違反單一職責原則啊，每個類別只能有一個職責，只能做一件事。 (2) 這個類別，確實只做一件事，那就是實現需求！',
       tags: ['1', '2', '3'],

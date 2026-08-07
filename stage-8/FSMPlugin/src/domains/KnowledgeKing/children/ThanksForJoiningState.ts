@@ -87,7 +87,7 @@ export class ThanksForJoiningState extends State<BaseEvent> {
     waterballCommunity.stopBroadcasting({ speakerId: botId })
   }
 
-  enter(event: BaseEvent, context: FiniteStateMachine<BaseEvent>): void {
+  enter(event: BaseEvent, _context: FiniteStateMachine<BaseEvent>): void {
     this.reset()
 
     if (
@@ -97,9 +97,10 @@ export class ThanksForJoiningState extends State<BaseEvent> {
       this.announceResult(event)
 
       const onTimeout = () => {
-        context.trigger(
+        const waterballCommunity = event.getPayload().context
+        waterballCommunity.triggerEvent(
           new KnowledgeKingEndedEvent({
-            context: event.getPayload().context,
+            context: waterballCommunity,
           }),
         )
       }
