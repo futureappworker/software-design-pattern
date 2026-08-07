@@ -2,7 +2,7 @@ import {
   Member,
   MemberRole,
   type WaterballCommunity,
-} from '../../../WaterballCommunity/src'
+} from '../../WaterballCommunity/src'
 
 type LoginParams = {
   waterballCommunity: WaterballCommunity

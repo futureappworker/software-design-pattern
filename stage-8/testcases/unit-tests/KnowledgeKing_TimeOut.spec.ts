@@ -5,7 +5,13 @@ import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { login, newMessage, started, TimeUnit, timeElapsed } from './utils'
+import {
+  login,
+  newMessage,
+  started,
+  TimeUnit,
+  timeElapsed,
+} from '../test-utils'
 
 const testcaseDir = dirname(fileURLToPath(import.meta.url))
 const baseName = 'KnowledgeKing_TimeOut'

@@ -12,7 +12,7 @@ import {
   started,
   TimeUnit,
   timeElapsed,
-} from './utils'
+} from '../test-utils'
 
 const testcaseDir = dirname(fileURLToPath(import.meta.url))
 const baseName = 'KnowledgeKing_ThanksForJoining_ActiveBroadcaster'

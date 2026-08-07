@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { login, logout, newMessage, started } from './utils'
+import { login, logout, newMessage, started } from '../test-utils'
 
 const testcaseDir = dirname(fileURLToPath(import.meta.url))
 const baseName = 'ChatBot_Interactive_LogoutSwitchToDefault'

@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { login, newPost, started } from './utils'
+import { login, newPost, started } from '../test-utils'
 
 const testcaseDir = dirname(fileURLToPath(import.meta.url))
 const baseName = 'Forum_BotComment_InteractiveState'

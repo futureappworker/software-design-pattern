@@ -1,5 +1,5 @@
-import { BotFacade } from '../../../BotFacade/BotFacade'
-import { WaterballCommunity } from '../../../WaterballCommunity/src'
+import { BotFacade } from '../../BotFacade/BotFacade'
+import { WaterballCommunity } from '../../WaterballCommunity/src'
 
 type StartedParams = {
   time: string

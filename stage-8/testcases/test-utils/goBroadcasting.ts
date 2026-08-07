@@ -1,4 +1,4 @@
-import type { WaterballCommunity } from '../../../WaterballCommunity/src'
+import type { WaterballCommunity } from '../../WaterballCommunity/src'
 
 type GoBroadcastingParams = {
   waterballCommunity: WaterballCommunity

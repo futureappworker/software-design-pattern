@@ -5,7 +5,7 @@ import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { goBroadcasting, login, started, stopBroadcasting } from './utils'
+import { goBroadcasting, login, started, stopBroadcasting } from '../test-utils'
 
 const testcaseDir = dirname(fileURLToPath(import.meta.url))
 const baseName = 'Broadcast_SingleUser'

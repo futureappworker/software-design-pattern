@@ -12,7 +12,7 @@ import {
   speak,
   started,
   stopBroadcasting,
-} from './utils'
+} from '../test-utils'
 
 const testcaseDir = dirname(fileURLToPath(import.meta.url))
 const baseName = 'Command_Record_QuotaLimit'
