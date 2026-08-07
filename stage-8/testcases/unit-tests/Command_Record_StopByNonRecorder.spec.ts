@@ -5,13 +5,7 @@ import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import {
-  goBroadcasting,
-  login,
-  newMessage,
-  speak,
-  started,
-} from './utils'
+import { goBroadcasting, login, newMessage, speak, started } from './utils'
 
 const testcaseDir = dirname(fileURLToPath(import.meta.url))
 const baseName = 'Command_Record_StopByNonRecorder'

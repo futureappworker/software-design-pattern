@@ -2,6 +2,7 @@ import { type FiniteStateMachine, State } from '../../../../../FSM/src/index'
 import type { BaseEvent } from '../../BaseEvent'
 import { KnowledgeKingEndedEvent } from '../transitions/KnowledgeKingEndedTransition/KnowledgeKingEndedEvent'
 import { AllQuestionsAnsweredEvent } from './AllQuestionsAnsweredTransition/AllQuestionsAnsweredEvent'
+import { AnswerTimeEndedEvent } from './AnswerTimeEndedTransition/AnswerTimeEndedEvent'
 
 export class ThanksForJoiningState extends State<BaseEvent> {
   private static instance: ThanksForJoiningState
@@ -61,38 +62,39 @@ export class ThanksForJoiningState extends State<BaseEvent> {
     this.startedAt = null
   }
 
+  private announceResult(
+    event: AllQuestionsAnsweredEvent | AnswerTimeEndedEvent,
+  ): void {
+    const { winnerMemberId, context: waterballCommunity } = event.getPayload()
+    const botId = waterballCommunity.getBot().getId()
+    const content = winnerMemberId ? `The winner is ${winnerMemberId}` : 'Tie!'
+
+    // 若已有人在廣播，改以聊天訊息公布結果
+    if (waterballCommunity.hasActiveSpeaker()) {
+      waterballCommunity.sendMessage({
+        authorId: botId,
+        content,
+        tags: [],
+      })
+      return
+    }
+
+    waterballCommunity.goBroadcasting({ speakerId: botId })
+    waterballCommunity.speak({
+      speakerId: botId,
+      content,
+    })
+    waterballCommunity.stopBroadcasting({ speakerId: botId })
+  }
+
   enter(event: BaseEvent, context: FiniteStateMachine<BaseEvent>): void {
     this.reset()
-    if (event instanceof AllQuestionsAnsweredEvent) {
-      const { winnerMemberId } = event.getPayload()
 
-      const waterballCommunity = event.getPayload().context
-      const botId = waterballCommunity.getBot().getId()
-
-      waterballCommunity.sendMessage({
-        authorId: botId,
-        content: 'record',
-        tags: [],
-      })
-
-      if (winnerMemberId) {
-        waterballCommunity.speak({
-          speakerId: botId,
-          content: `The winner is ${winnerMemberId}`,
-        })
-      }
-      if (!winnerMemberId) {
-        waterballCommunity.speak({
-          speakerId: botId,
-          content: 'Tie!',
-        })
-      }
-
-      waterballCommunity.sendMessage({
-        authorId: botId,
-        content: 'stop-recording',
-        tags: [],
-      })
+    if (
+      event instanceof AllQuestionsAnsweredEvent ||
+      event instanceof AnswerTimeEndedEvent
+    ) {
+      this.announceResult(event)
 
       const onTimeout = () => {
         context.trigger(

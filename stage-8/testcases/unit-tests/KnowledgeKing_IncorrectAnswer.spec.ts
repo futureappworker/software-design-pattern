@@ -1,20 +1,20 @@
-// 範例輸入: Command_Record_StopByRecorder.in
-// 範例輸出: Command_Record_StopByRecorder.out
+// 範例輸入: KnowledgeKing_IncorrectAnswer.in
+// 範例輸出: KnowledgeKing_IncorrectAnswer.out
 
 import { readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { goBroadcasting, login, newMessage, speak, started } from './utils'
+import { login, newMessage, started } from './utils'
 
 const testcaseDir = dirname(fileURLToPath(import.meta.url))
-const baseName = 'Command_Record_StopByRecorder'
+const baseName = 'KnowledgeKing_IncorrectAnswer'
 
 function readExpectedOutput(): string {
   return readFileSync(join(testcaseDir, `${baseName}.out`), 'utf-8').trimEnd()
 }
 
-describe('Command_Record_StopByRecorder', () => {
+describe('KnowledgeKing_IncorrectAnswer', () => {
   afterEach(() => {
     vi.restoreAllMocks()
   })
@@ -33,35 +33,33 @@ describe('Command_Record_StopByRecorder', () => {
       quota: 10,
     })
 
-    // [login] {"userId": "3", "isAdmin": false}
-    const member3 = login({ waterballCommunity, userId: '3', isAdmin: false })
+    // [login] {"userId": "admin", "isAdmin": true}
+    const admin = login({
+      waterballCommunity,
+      userId: 'admin',
+      isAdmin: true,
+    })
 
-    // [login] {"userId": "4", "isAdmin": false}
-    const member4 = login({ waterballCommunity, userId: '4', isAdmin: false })
-
-    // [go broadcasting] {"speakerId": "4"}
-    goBroadcasting({ waterballCommunity, speakerId: member4.getId() })
-
-    // [new message] {"authorId": "3", "content": "record", "tags": ["bot"]}
+    // [new message] {"authorId": "admin", "content": "king", "tags": ["bot"]}
     newMessage({
       waterballCommunity,
-      authorId: member3.getId(),
-      content: 'record',
+      authorId: admin.getId(),
+      content: 'king',
       tags: ['bot'],
     })
 
-    // [speak] {"speakerId": "4", "content": "Test"}
-    speak({
+    // [login] {"userId": "1", "isAdmin": false}
+    const member1 = login({
       waterballCommunity,
-      speakerId: member4.getId(),
-      content: 'Test',
+      userId: '1',
+      isAdmin: false,
     })
 
-    // [new message] {"authorId": "3", "content": "stop-recording", "tags": ["bot"]}
+    // [new message] {"authorId": "1", "content": "D", "tags": ["bot"]}
     newMessage({
       waterballCommunity,
-      authorId: member3.getId(),
-      content: 'stop-recording',
+      authorId: member1.getId(),
+      content: 'D',
       tags: ['bot'],
     })
 

@@ -362,12 +362,12 @@ export class WaterballCommunity {
   }
 
   goBroadcasting({ speakerId }: { speakerId: string }): void {
+    const isBot = speakerId === this.getBot().getId()
     const member = this.getMemberById(speakerId)
-    if (!member) {
+    if (!isBot && !member) {
       throw new Error('Member not found')
     }
     this.getBroadcast().goBroadcasting({ speakerId })
-    const isBot = speakerId === this.getBot().getId()
     if (isBot) {
       console.log('🤖 go broadcasting...')
     }
@@ -382,12 +382,12 @@ export class WaterballCommunity {
   }
 
   stopBroadcasting({ speakerId }: { speakerId: string }): void {
+    const isBot = speakerId === this.getBot().getId()
     const member = this.getMemberById(speakerId)
-    if (!member) {
+    if (!isBot && !member) {
       throw new Error('Member not found')
     }
     const broadcast = this.getBroadcast()
-    const isBot = speakerId === this.getBot().getId()
     if (isBot) {
       console.log('🤖 stop broadcasting...')
     }

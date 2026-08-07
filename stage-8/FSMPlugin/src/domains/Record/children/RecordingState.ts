@@ -1,4 +1,4 @@
-import { FiniteStateMachine, State } from '../../../../../FSM/src/index'
+import { type FiniteStateMachine, State } from '../../../../../FSM/src/index'
 import type { BaseEvent } from '../../BaseEvent'
 import { StartBroadcastingEvent } from './StartBroadcastingTransition/StartBroadcastingEvent'
 import { StopBroadcastingEvent } from './StopBroadcastingTransition/StopBroadcastingEvent'

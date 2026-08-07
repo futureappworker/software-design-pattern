@@ -157,6 +157,7 @@ export class QuestioningState extends State<BaseEvent> {
       context.trigger(
         new AnswerTimeEndedEvent({
           context: event.getPayload().context,
+          winnerMemberId: this.getWinnerMemberId(),
         }),
       )
     }
