@@ -29,6 +29,8 @@
 
 - `stage-8` - 副本八：社群機器人引擎 | 有限狀態機框架
 
+- `stage-9` - 副本九：基因演算法套件
+
 ## 執行
 
 OOP 技法一：依賴
@@ -114,6 +116,11 @@ pnpm exec tsx stage-7/src/index.ts
 副本八：社群機器人引擎 | 有限狀態機框架
 ```bash
 pnpm exec tsx stage-8/index.ts
+```
+
+副本九：基因演算法套件
+```bash
+pnpm exec tsx stage-9/index.ts
 ```
 
 ## Node.js 環境執行 TypeScript
