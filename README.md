@@ -120,7 +120,7 @@ pnpm exec tsx stage-8/index.ts
 
 副本九：基因演算法套件
 ```bash
-pnpm exec tsx stage-9/index.ts
+pnpm exec tsx stage-9/ProductionScheduling/src/index.ts
 ```
 
 ## Node.js 環境執行 TypeScript
