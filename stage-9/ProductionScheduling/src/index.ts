@@ -9,7 +9,7 @@ import {
 } from '../../GeneticAlgorithm/src'
 import { Company } from './domains/Company'
 import { Machine } from './domains/Machine'
-import { ProductionSchedulingCreateInitialPopulation } from './domains/ProductionSchedulingCreateInitialPopulation'
+import { ProductionSchedulingCreateInitialPopulationFactory } from './domains/ProductionSchedulingCreateInitialPopulationFactory'
 import { ProductionSchedulingCrossoverStrategy } from './domains/ProductionSchedulingCrossoverStrategy'
 import { ProductionSchedulingFitnessEvaluator } from './domains/ProductionSchedulingFitnessEvaluator'
 import { ProductionSchedulingGene } from './domains/ProductionSchedulingGene'
@@ -68,7 +68,7 @@ const fitnessEvaluator = new ProductionSchedulingFitnessEvaluator({
 // 並且每台機器和每名工人一次只能處理一個產品
 // 需要在最短的時間內生產所需的產品數量，並滿足以下客戶需求
 const productionSchedulingCreateInitialPopulation =
-  new ProductionSchedulingCreateInitialPopulation({
+  new ProductionSchedulingCreateInitialPopulationFactory({
     company,
     products,
     fitnessEvaluator,

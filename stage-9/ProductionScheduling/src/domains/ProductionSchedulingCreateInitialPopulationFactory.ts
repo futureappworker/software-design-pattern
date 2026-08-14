@@ -17,7 +17,7 @@ type ProductionSchedulingCreateInitialPopulationConfig = {
   populationSize?: number
 }
 
-export class ProductionSchedulingCreateInitialPopulation
+export class ProductionSchedulingCreateInitialPopulationFactory
   implements CreateInitialPopulationFactory
 {
   private company: Company
