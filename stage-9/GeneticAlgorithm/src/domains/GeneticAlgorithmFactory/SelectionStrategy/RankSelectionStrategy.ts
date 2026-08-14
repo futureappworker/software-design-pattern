@@ -20,9 +20,13 @@ export class RankSelectionStrategy extends SelectionStrategy {
     })
 
     const selectedIndividuals = []
+    const selectionSize = candidates.length
 
-    const selectionSize = Math.floor(candidates.length / 2)
+    if (selectionSize === 0) {
+      return new Population({ individuals: [] })
+    }
 
+    // 可重複抽樣，維持與原族群相同大小
     const totalRank = (candidates.length * (candidates.length + 1)) / 2
 
     for (let i = 0; i < selectionSize; i++) {

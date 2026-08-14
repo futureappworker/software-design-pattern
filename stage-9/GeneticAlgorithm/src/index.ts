@@ -1,0 +1,6 @@
+export * from './domains/FitnessEvaluator'
+export * from './domains/Gene'
+export * from './domains/GeneticAlgorithm'
+export * from './domains/GeneticAlgorithmFactory/index'
+export * from './domains/Individual'
+export * from './domains/Population'
